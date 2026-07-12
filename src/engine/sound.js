@@ -12,6 +12,10 @@ let ctx = null
 let master = null
 let muted = false
 
+// Ambience graph (built lazily on first start). A soft, slowly-drifting room
+// tone that sits far under the effects to give the app a "live workspace" feel.
+let ambience = null
+
 function ensureContext() {
   if (ctx) return ctx
   const AC = window.AudioContext || window.webkitAudioContext
@@ -25,6 +29,78 @@ function ensureContext() {
 
 export function setMuted(value) {
   muted = !value // callers pass the "sound enabled" flag
+  // Duck the ambience bed to silence when muted, restore it when unmuted.
+  if (ambience) {
+    const target = muted ? 0.0001 : ambience.level
+    ambience.gain.gain.setTargetAtTime(target, ctx.currentTime, 0.4)
+  }
+}
+
+/**
+ * Build a shared noise buffer (a few seconds of white noise) we can loop for
+ * the ambience bed. Reused so we don't allocate on every start.
+ */
+let noiseBuffer = null
+function getNoiseBuffer() {
+  if (noiseBuffer) return noiseBuffer
+  const len = ctx.sampleRate * 3
+  noiseBuffer = ctx.createBuffer(1, len, ctx.sampleRate)
+  const data = noiseBuffer.getChannelData(0)
+  for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1
+  return noiseBuffer
+}
+
+/**
+ * Start the looping ambience bed: a low sine drone plus heavily low-passed
+ * noise (a faint "air conditioning / server room" hush), with a slow LFO on
+ * the filter so it breathes rather than sitting static. Idempotent.
+ */
+export function startAmbience() {
+  const c = ensureContext()
+  if (!c || ambience) return
+  if (c.state === 'suspended') c.resume()
+
+  const level = 0.5 // relative to master; kept low so effects stay on top
+  const bed = c.createGain()
+  bed.gain.value = muted ? 0.0001 : level
+  bed.connect(master)
+
+  // Low drone.
+  const drone = c.createOscillator()
+  drone.type = 'sine'
+  drone.frequency.value = 58
+  const droneGain = c.createGain()
+  droneGain.gain.value = 0.12
+  drone.connect(droneGain)
+  droneGain.connect(bed)
+  drone.start()
+
+  // Filtered noise hush.
+  const noise = c.createBufferSource()
+  noise.buffer = getNoiseBuffer()
+  noise.loop = true
+  const lp = c.createBiquadFilter()
+  lp.type = 'lowpass'
+  lp.frequency.value = 320
+  lp.Q.value = 0.6
+  const noiseGain = c.createGain()
+  noiseGain.gain.value = 0.06
+  noise.connect(lp)
+  lp.connect(noiseGain)
+  noiseGain.connect(bed)
+  noise.start()
+
+  // Slow LFO gently sweeps the filter so the hush "breathes".
+  const lfo = c.createOscillator()
+  lfo.type = 'sine'
+  lfo.frequency.value = 0.05
+  const lfoGain = c.createGain()
+  lfoGain.gain.value = 120
+  lfo.connect(lfoGain)
+  lfoGain.connect(lp.frequency)
+  lfo.start()
+
+  ambience = { gain: bed, level, nodes: [drone, noise, lfo] }
 }
 
 /**
@@ -51,12 +127,49 @@ function tone({ freq, type = 'sine', start = 0, dur = 0.12, gain = 1, glideTo = 
   osc.stop(t0 + dur + 0.02)
 }
 
+/**
+ * A short burst of band-passed noise — the raw material for "paper" and other
+ * textural, non-pitched sounds. The band-pass centre sweeps over the burst so
+ * it reads as a quick rustle/flip rather than a flat shhh.
+ */
+function noiseBurst({ start = 0, dur = 0.18, gain = 1, freq = 1800, sweepTo = 900, q = 0.8 }) {
+  if (!ctx || !master) return
+  const t0 = ctx.currentTime + start
+  const src = ctx.createBufferSource()
+  src.buffer = getNoiseBuffer()
+  src.loop = true
+
+  const bp = ctx.createBiquadFilter()
+  bp.type = 'bandpass'
+  bp.Q.value = q
+  bp.frequency.setValueAtTime(freq, t0)
+  bp.frequency.exponentialRampToValueAtTime(sweepTo, t0 + dur)
+
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0.0001, t0)
+  g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01)
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur)
+
+  src.connect(bp)
+  bp.connect(g)
+  g.connect(master)
+  src.start(t0)
+  src.stop(t0 + dur + 0.02)
+}
+
 // The sound palette. Each entry is a small composition of tones.
 const EFFECTS = {
   // Light UI feedback.
   hover: () => tone({ freq: 620, type: 'sine', dur: 0.05, gain: 0.35 }),
   click: () => tone({ freq: 420, type: 'triangle', dur: 0.08, gain: 0.7, glideTo: 300 }),
   tab: () => tone({ freq: 520, type: 'triangle', dur: 0.09, gain: 0.6, glideTo: 660 }),
+  // Tab switch: a paper-flip rustle — two overlapping noise sweeps for the
+  // "page lifting then settling" texture, with a soft low thump underneath.
+  paper: () => {
+    noiseBurst({ dur: 0.14, gain: 0.5, freq: 2600, sweepTo: 1100, q: 0.7 })
+    noiseBurst({ start: 0.06, dur: 0.13, gain: 0.35, freq: 1500, sweepTo: 700, q: 0.9 })
+    tone({ freq: 150, type: 'sine', start: 0.05, dur: 0.09, gain: 0.25, glideTo: 90 })
+  },
   toggle: () => tone({ freq: 700, type: 'square', dur: 0.06, gain: 0.4 }),
   back: () => tone({ freq: 360, type: 'triangle', dur: 0.1, gain: 0.6, glideTo: 240 }),
 
