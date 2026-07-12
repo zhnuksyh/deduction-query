@@ -20,6 +20,7 @@ export default function Credits({ game, play }) {
       <div className="space-y-5 text-sm text-zinc-400">
         <Credit role="Concept & Design" who="Zahin Ukasyah" />
         <Credit role="Main Menu Art" who="Rebecca Hu — Illustrator & Concept Artist" />
+        <Credit role="Music" who="Simon Folwar, Danijel Zambo, Tim Schaufert — via Uppbeat" />
         <Credit role="SQL Engine" who="sql.js — SQLite compiled to WebAssembly" />
         <Credit role="Editor" who="CodeMirror 6" />
         <Credit role="Data Grid" who="TanStack Table" />
