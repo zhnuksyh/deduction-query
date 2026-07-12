@@ -51,14 +51,8 @@ export default function LevelSelect({ game }) {
 function Folder({ c, index, unlocked, solved, theme, onOpen }) {
   if (!unlocked) {
     return (
-      <div className="group relative flex w-40 shrink-0 cursor-not-allowed flex-col justify-between border-l border-zinc-800 bg-zinc-900/60 px-4 py-6">
-        <div className="vertical-rl font-display text-lg tracking-widest text-zinc-700">
-          {c.code} // LOCKED
-        </div>
-        <div className="text-center text-3xl text-zinc-700">▚</div>
-        <div className="text-[9px] uppercase tracking-widest text-zinc-700">
-          dependency unmet
-        </div>
+      <div className="group relative flex w-40 shrink-0 cursor-not-allowed flex-col items-center justify-center border-l border-zinc-800 bg-zinc-900/60 px-4 py-6">
+        <div className="text-3xl text-zinc-700">🔒</div>
       </div>
     )
   }
@@ -69,11 +63,8 @@ function Folder({ c, index, unlocked, solved, theme, onOpen }) {
       style={{ backgroundColor: theme.bg, color: theme.text, marginTop: `${(index % 3) * 14}px` }}
       className="group relative flex w-56 shrink-0 flex-col justify-between px-4 py-5 text-left transition-transform hover:-translate-y-2 focus:-translate-y-2"
     >
-      {/* Vertical tab label */}
-      <div className="mb-4 flex items-start justify-between">
-        <div className="vertical-rl h-40 font-display text-2xl font-black leading-none tracking-tight">
-          {c.code} // {c.tag}
-        </div>
+      {/* Status chip */}
+      <div className="mb-4 flex items-start justify-end">
         <span
           className="rounded-sm px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-widest"
           style={{
@@ -90,7 +81,7 @@ function Folder({ c, index, unlocked, solved, theme, onOpen }) {
         <div className="mb-1 text-[10px] uppercase tracking-[0.25em] opacity-60">
           FILE_{c.id.split('_')[1]}//
         </div>
-        <h3 className="font-display text-xl font-black leading-tight">{c.title}</h3>
+        <h3 className="text-xl font-semibold leading-tight">{c.title}</h3>
         <p className="mt-2 text-[11px] leading-snug opacity-75">{c.teaser}</p>
       </div>
 

@@ -23,13 +23,10 @@ export default function ReportCardTab({ caseData, unlocked, game, goToAnalysis }
   const parts = report.template.split(/(\{\{\w+\}\})/g)
 
   return (
-    <div className="h-full overflow-y-auto px-6 py-8">
+    <div className="h-full overflow-y-auto px-8 py-8">
       <div className="mx-auto max-w-3xl">
-        <div className="mb-6 border-l-2 border-crimson pl-4">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">
-            deduction sheet
-          </div>
-          <h2 className="font-display text-2xl font-black text-zinc-100">REPORT CARD</h2>
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-zinc-100">Report Card</h2>
           <p className="mt-1 text-xs text-zinc-500">
             Each blank stays locked until the query that proves it runs in Analysis.
           </p>

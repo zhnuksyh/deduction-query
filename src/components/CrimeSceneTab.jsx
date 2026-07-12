@@ -5,13 +5,10 @@ export default function CrimeSceneTab({ caseData }) {
   }
 
   return (
-    <div className="h-full overflow-y-auto px-6 py-8">
+    <div className="h-full overflow-y-auto px-8 py-8">
       <div className="mx-auto max-w-3xl">
-        <div className="mb-6 border-l-2 border-crimson pl-4">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">
-            case file // {caseData.code}
-          </div>
-          <h2 className="font-display text-3xl font-black text-zinc-100">{caseData.title}</h2>
+        <div className="mb-6">
+          <h2 className="text-3xl font-semibold text-zinc-100">{caseData.title}</h2>
         </div>
 
         {/* Vitals */}
