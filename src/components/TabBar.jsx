@@ -68,17 +68,25 @@ function Tab({ tab, isActive, onSelect, style }) {
           d={`${CLOSED_PATH} L 1 ${H} Z`}
           fill={isActive ? '#09090b' : '#71717a'}
         />
-        {/* Top + side outline. Active = white; inactive = darker grey. */}
+        {/* Top + side outline. Active = white (matches the card border weight);
+            inactive = darker grey. non-scaling-stroke keeps it a true 1px so it
+            reads identically to the CSS border on the content card. */}
         <path
           d={isActive ? OPEN_PATH : CLOSED_PATH}
           fill="none"
-          stroke={isActive ? '#fafafa' : '#52525b'}
-          strokeWidth={isActive ? 1.5 : 1}
+          stroke={isActive ? '#f4f4f5' : '#52525b'}
+          strokeWidth="1"
           strokeLinejoin="round"
+          vectorEffect="non-scaling-stroke"
         />
         {/* Inactive tabs carry the card's white top border along their bottom edge. */}
         {!isActive && (
-          <path d={`M 0 ${H - 0.75} L ${W} ${H - 0.75}`} stroke="#f4f4f5" strokeWidth="1.5" />
+          <path
+            d={`M 0 ${H} L ${W} ${H}`}
+            stroke="#f4f4f5"
+            strokeWidth="1"
+            vectorEffect="non-scaling-stroke"
+          />
         )}
       </svg>
       <span
