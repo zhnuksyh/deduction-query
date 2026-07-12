@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -18,7 +18,7 @@ body {
   margin: 0;
   background-color: #09090b; /* zinc-950 */
   color: #e4e4e7;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: 'Poppins', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
 }
@@ -85,4 +85,69 @@ body {
 .vertical-rl {
   writing-mode: vertical-rl;
   text-orientation: mixed;
+}
+
+/*
+ * Folder-style tab shape (reference image #6): a trapezoid with angled sides
+ * and rounded top corners. The fill is a clip-path; the outline is a separate
+ * SVG background layer whose path matches the same trapezoid, drawn with a
+ * non-scaling stroke so it stays crisp at any tab width.
+ *
+ * ANGLE = horizontal inset of the top edge relative to the bottom (in px).
+ * RADIUS = corner rounding. Both live only here so tabs stay consistent.
+ */
+.tab-shape {
+  --tab-angle: 18px;
+  --tab-radius: 12px;
+  position: relative;
+  border: none;
+  background: transparent;
+  /* Overlap the content card's top border by 1px so the active tab merges in. */
+  margin-bottom: -1px;
+  /* Trapezoid fill via clip-path: bottom edge full width, top edge inset. */
+  clip-path: polygon(
+    var(--tab-angle) 0,
+    calc(100% - var(--tab-angle)) 0,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Inactive tab: white fill. */
+.tab-shape[data-active='false'] {
+  background-color: #f4f4f5; /* zinc-100 */
+}
+.tab-shape[data-active='false']:hover {
+  background-color: #ffffff;
+}
+
+/* Active tab: black fill, sits above the content card. */
+.tab-shape[data-active='true'] {
+  background-color: #09090b; /* zinc-950 */
+  z-index: 2;
+}
+
+/*
+ * Outline layer. A pseudo-element paints an SVG of the SAME trapezoid path,
+ * stroked in white. For the active tab we omit the bottom segment so the
+ * outline opens into the content card below (the folder-merge effect).
+ */
+.tab-shape::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+/* Inactive: subtle full outline in a light gray so tabs read as separate. */
+.tab-shape[data-active='false']::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'%3E%3Cpath d='M6 2 Q4 0.6 8 0.6 L92 0.6 Q96 0.6 94 2 L99.4 39.4 L0.6 39.4 Z' fill='none' stroke='%23d4d4d8' stroke-width='0.8' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+}
+
+/* Active: white outline on top + sides, open at the bottom (no bottom stroke). */
+.tab-shape[data-active='true']::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'%3E%3Cpath d='M0.6 40 L6 2 Q4 0.6 10 0.6 L90 0.6 Q96 0.6 94 2 L99.4 40' fill='none' stroke='%23fafafa' stroke-width='1.2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
 }
