@@ -139,6 +139,9 @@ function Folder({ c, index = 0, unlocked, solved, onOpen, onHover }) {
           <h3 className="text-xl font-semibold leading-tight text-zinc-300">{c.title}</h3>
           <p className="mt-2 pr-6 text-[11px] leading-snug text-zinc-500">{c.teaser}</p>
         </div>
+        {/* Spacer matching the unlocked card's "open file" row so the blurred
+            title/teaser block sits at the same height across all cards. */}
+        <div className="mt-4 h-[10px]" />
 
         {/* Lock badge overlay. */}
         <div className="absolute inset-0 flex items-center justify-center">
