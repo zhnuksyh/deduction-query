@@ -107,3 +107,52 @@ body {
     transition-duration: 0.001ms !important;
   }
 }
+
+/*
+ * Custom range sliders — a crimson track and a clean crimson thumb with NO
+ * outline/ring. Fully self-styled so the browser's default accent border and
+ * focus outline don't show.
+ */
+.range-crimson {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  background: #3f3f46; /* zinc-700 unfilled track */
+  outline: none;
+  cursor: pointer;
+}
+.range-crimson:focus,
+.range-crimson:focus-visible {
+  outline: none;
+}
+/* Thumb — WebKit/Blink */
+.range-crimson::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #e11d48; /* crimson */
+  border: none;
+  box-shadow: none;
+}
+/* Thumb — Firefox */
+.range-crimson::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #e11d48;
+  border: none;
+  box-shadow: none;
+}
+.range-crimson::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: #3f3f46;
+}
+.range-crimson:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
