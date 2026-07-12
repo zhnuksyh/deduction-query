@@ -104,7 +104,7 @@ function Folder({ c, unlocked, solved, onOpen }) {
     >
       {/* Vertical file code down the top-right corner. */}
       <div
-        className="pointer-events-none absolute right-4 top-4 text-sm font-bold uppercase tracking-[0.3em] text-zinc-500"
+        className="pointer-events-none absolute right-4 top-4 text-sm font-light uppercase tracking-[0.5em] text-zinc-500"
         style={{ writingMode: 'vertical-rl' }}
       >
         FILE_{c.id.split('_')[1]}//
