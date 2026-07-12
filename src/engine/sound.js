@@ -12,9 +12,18 @@ let ctx = null
 let master = null
 let muted = false
 
+// Volume mix (0..1). The audible SFX level is BASE_GAIN * master * sfx; the
+// BASE keeps the synth palette gentle regardless of the user's slider.
+const BASE_GAIN = 0.22
+let masterVolume = 0.8
+let sfxVolume = 0.8
+
 // Ambience graph (built lazily on first start). A soft, slowly-drifting room
 // tone that sits far under the effects to give the app a "live workspace" feel.
+// It plays only when sound is on AND background music isn't (so they don't
+// muddy each other) — see `ambienceAllowed`.
 let ambience = null
+let musicActive = false // set by the app so ambience yields to music
 
 function ensureContext() {
   if (ctx) return ctx
@@ -22,18 +31,50 @@ function ensureContext() {
   if (!AC) return null
   ctx = new AC()
   master = ctx.createGain()
-  master.gain.value = 0.18 // keep the whole palette gentle
+  master.gain.value = BASE_GAIN * masterVolume * sfxVolume
   master.connect(ctx.destination)
   return ctx
 }
 
+function applyMasterGain() {
+  if (!master || !ctx) return
+  // Muting cuts the whole synth bus; otherwise scale by the mix.
+  const target = muted ? 0.0001 : BASE_GAIN * masterVolume * sfxVolume
+  master.gain.setTargetAtTime(target, ctx.currentTime, 0.05)
+}
+
+/** True when the ambience bed should be audible right now. */
+function ambienceAllowed() {
+  return !muted && !musicActive
+}
+
+function applyAmbienceGain() {
+  if (!ambience || !ctx) return
+  const target = ambienceAllowed() ? ambience.level : 0.0001
+  ambience.gain.gain.setTargetAtTime(target, ctx.currentTime, 0.4)
+}
+
 export function setMuted(value) {
   muted = !value // callers pass the "sound enabled" flag
-  // Duck the ambience bed to silence when muted, restore it when unmuted.
-  if (ambience) {
-    const target = muted ? 0.0001 : ambience.level
-    ambience.gain.gain.setTargetAtTime(target, ctx.currentTime, 0.4)
-  }
+  applyMasterGain()
+  applyAmbienceGain()
+}
+
+/** Update the SFX side of the mix (master + sfx sliders, both 0..1). */
+export function setSfxVolume({ master: m, sfx } = {}) {
+  if (m !== undefined) masterVolume = clamp01(m)
+  if (sfx !== undefined) sfxVolume = clamp01(sfx)
+  applyMasterGain()
+}
+
+/** Tell the engine whether background music is currently playing. */
+export function setMusicActive(active) {
+  musicActive = !!active
+  applyAmbienceGain()
+}
+
+function clamp01(v) {
+  return Math.max(0, Math.min(1, Number(v) || 0))
 }
 
 /**
@@ -62,7 +103,7 @@ export function startAmbience() {
 
   const level = 0.5 // relative to master; kept low so effects stay on top
   const bed = c.createGain()
-  bed.gain.value = muted ? 0.0001 : level
+  bed.gain.value = ambienceAllowed() ? level : 0.0001
   bed.connect(master)
 
   // Low drone.
