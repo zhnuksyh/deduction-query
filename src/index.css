@@ -45,14 +45,21 @@ body {
 }
 
 /*
- * Remove the editor's line highlighting entirely — no active-line band, no
- * active-gutter band, no selection-match tint.
+ * Force the editor, gutter, and content backgrounds to the panel's near-black
+ * so there's no lighter band. The ONLY line tint is a subtle dark grey on the
+ * active line, marking where the cursor is.
  */
+.cm-editor,
+.cm-editor .cm-gutters,
+.cm-editor .cm-content {
+  background-color: #09090b !important;
+}
 .cm-editor .cm-activeLine {
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.06);
 }
 .cm-editor .cm-activeLineGutter {
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #a1a1aa;
 }
 .cm-editor .cm-selectionMatch,
 .cm-editor .cm-matchingBracket {
