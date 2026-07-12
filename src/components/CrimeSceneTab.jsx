@@ -1,3 +1,5 @@
+import { Lock } from 'lucide-react'
+
 export default function CrimeSceneTab({ caseData }) {
   const scene = caseData.crimeScene
   if (!scene) {
@@ -5,7 +7,7 @@ export default function CrimeSceneTab({ caseData }) {
   }
 
   return (
-    <div className="h-full overflow-y-auto px-8 py-8">
+    <div className="h-full overflow-y-auto px-6 py-6">
       <div className="mx-auto max-w-3xl">
         <div className="mb-6">
           <h2 className="text-3xl font-semibold text-zinc-100">{caseData.title}</h2>
@@ -18,24 +20,9 @@ export default function CrimeSceneTab({ caseData }) {
           <Vital term="Time of death" value={scene.timeOfDeath} />
         </dl>
 
-        {/* Report body */}
+        {/* Report body — the forensic details are woven into this narrative. */}
         <div className="whitespace-pre-line text-sm leading-relaxed text-zinc-300">
           {scene.report}
-        </div>
-
-        {/* Forensic constraints */}
-        <div className="mt-8 border border-zinc-700 bg-zinc-900/40 p-4">
-          <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-300">
-            forensic constraints
-          </div>
-          <ul className="space-y-2">
-            {scene.constraints.map((c, i) => (
-              <li key={i} className="flex gap-2 text-sm text-zinc-300">
-                <span className="text-zinc-300">▸</span>
-                <span>{c}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </div>
@@ -55,10 +42,10 @@ export function LockedCase({ caseData }) {
   return (
     <div className="flex h-full items-center justify-center px-6">
       <div className="max-w-md text-center">
-        <div className="mb-3 text-5xl text-zinc-700">▚▚</div>
-        <h2 className="font-display text-2xl font-black text-zinc-400">{caseData.title}</h2>
+        <Lock className="mx-auto mb-4 h-9 w-9 text-zinc-700" strokeWidth={1.5} />
+        <h2 className="text-2xl font-semibold text-zinc-400">{caseData.title}</h2>
         <p className="mt-2 text-sm text-zinc-600">{caseData.teaser}</p>
-        <p className="mt-6 text-[11px] uppercase tracking-[0.3em] text-crimson-dim">
+        <p className="mt-6 text-[11px] uppercase tracking-[0.3em] text-zinc-600">
           case data classified — solve the prior file to unlock
         </p>
       </div>

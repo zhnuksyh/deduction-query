@@ -1,3 +1,4 @@
+import { Lock } from 'lucide-react'
 import { CASES, isCaseUnlocked } from '../cases/index.js'
 
 // Folder tone per theme, echoing the GRID DAILY reference palette.
@@ -15,7 +16,7 @@ export default function LevelSelect({ game }) {
   return (
     <div className="flex h-full w-full flex-col">
       {/* Top bar */}
-      <header className="flex items-center px-6 py-4">
+      <header className="flex items-center px-6 py-6">
         <button
           onClick={() => game.setScreen('menu')}
           className="flex h-10 w-10 items-center justify-center border border-zinc-700 bg-zinc-900 text-lg text-zinc-400 transition-colors hover:border-zinc-500 hover:text-zinc-100"
@@ -26,7 +27,7 @@ export default function LevelSelect({ game }) {
       </header>
 
       {/* Cabinet: staggered vertical folder tabs */}
-      <div className="relative flex flex-1 items-stretch overflow-x-auto px-6 py-8">
+      <div className="relative flex flex-1 items-stretch overflow-x-auto px-6 py-6">
         {CASES.map((c, i) => {
           const unlocked = isCaseUnlocked(c.id, save.solvedCases)
           const solved = save.solvedCases.includes(c.id)
@@ -52,7 +53,7 @@ function Folder({ c, index, unlocked, solved, theme, onOpen }) {
   if (!unlocked) {
     return (
       <div className="group relative flex w-40 shrink-0 cursor-not-allowed flex-col items-center justify-center border-l border-zinc-800 bg-zinc-900/60 px-4 py-6">
-        <div className="text-3xl text-zinc-700">🔒</div>
+        <Lock className="h-7 w-7 text-zinc-700" strokeWidth={1.5} />
       </div>
     )
   }
