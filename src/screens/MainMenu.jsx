@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 const MENU = [
   { key: 'new', label: 'NEW GAME' },
   { key: 'continue', label: 'CONTINUE' },
@@ -9,8 +7,6 @@ const MENU = [
 ]
 
 export default function MainMenu({ game }) {
-  const [hover, setHover] = useState(0)
-
   const handle = (key) => {
     switch (key) {
       case 'new':
@@ -41,17 +37,12 @@ export default function MainMenu({ game }) {
 
       {/* Menu */}
       <ul className="flex flex-col items-center gap-2">
-        {MENU.map((item, i) => (
+        {MENU.map((item) => (
           <li key={item.key}>
             <button
-              onMouseEnter={() => setHover(i)}
-              onFocus={() => setHover(i)}
               onClick={() => handle(item.key)}
-              className={`font-display text-xl tracking-wide transition-colors ${
-                hover === i ? 'text-zinc-100' : 'text-zinc-500 hover:text-zinc-300'
-              }`}
+              className="font-display text-xl tracking-wide text-zinc-400 transition-colors hover:text-crimson"
             >
-              {hover === i && <span className="mr-2 text-crimson">&gt;</span>}
               {item.label}
             </button>
           </li>
