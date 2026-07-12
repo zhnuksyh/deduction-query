@@ -86,18 +86,18 @@ export default function Options({ game, play }) {
                     }}
                     className={`press flex w-full items-center justify-between rounded-xl border px-4 py-2.5 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                       active
-                        ? 'border-teal/70 bg-teal/5'
+                        ? 'border-crimson/70 bg-crimson/5'
                         : 'border-zinc-800 hover:border-zinc-600'
                     }`}
                   >
                     <span>
-                      <span className={`text-sm ${active ? 'text-teal' : 'text-zinc-200'}`}>
+                      <span className={`text-sm ${active ? 'text-crimson' : 'text-zinc-200'}`}>
                         {t.label}
                       </span>
                       <span className="ml-2 text-xs text-zinc-500">{t.artist}</span>
                     </span>
                     {active && (
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-teal">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-crimson">
                         playing
                       </span>
                     )}
@@ -172,7 +172,7 @@ function Slider({ label, value, onChange, disabled }) {
         value={value}
         disabled={disabled}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-teal disabled:cursor-not-allowed"
+        className="w-full accent-crimson disabled:cursor-not-allowed"
       />
     </div>
   )
