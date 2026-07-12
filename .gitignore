@@ -11,5 +11,5 @@ yarn-error.log*
 .idea
 dev-server.log
 
-# stray screenshots dropped in the project root
-*.jpg
+# stray screenshots dropped in the project root (assets under src/ are tracked)
+/*.jpg
