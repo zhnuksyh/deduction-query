@@ -1,10 +1,9 @@
 # Deductive Query
 
-A browser-based mystery deduction game where you play a data analyst for the
-**Bureau of Digital Forensics (B.D.F.)**. Field agents upload physical evidence,
-interviews, and timelines into relational databases — you sit at a terminal and
-write **raw SQL** to cross-reference alibis, spot timeline impossibilities, and
-crack the case.
+A browser-based murder mystery deduction game where you play as the **Detective**.
+Field agents upload physical evidence, interviews, and timelines into relational
+databases, where you sit at a terminal and write **raw SQL** to cross-reference
+alibis, spot timeline inconsistencies, and crack the case.
 
 You can't guess your way to a solution. You have to query the facts and find the
 logical flaw hiding in the tables.
@@ -62,6 +61,32 @@ npm run preview  # preview the production build
 > On Windows, run these from PowerShell — some dependency post-install scripts
 > (esbuild, sql.js) need `node` on the PATH.
 
+## Deployment (GitHub Pages)
+
+The repo ships a GitHub Actions workflow (`.github/workflows/deploy.yml`) that
+builds and publishes to GitHub Pages on every push to `main`. To enable it:
+
+1. Push to GitHub.
+2. In the repo, go to **Settings → Pages → Build and deployment** and set
+   **Source** to **GitHub Actions**.
+3. The next push to `main` (or a manual run from the **Actions** tab) deploys to
+   `https://<user>.github.io/deduction-query/`.
+
+Because asset paths are relative, the same build also works on Netlify, Vercel,
+or any static host.
+
+## Installable (PWA)
+
+The app is a Progressive Web App — you can add it to your phone or tablet home
+screen and launch it fullscreen, and it works offline once cached.
+
+- **iOS/iPadOS (Safari):** open the site → Share → **Add to Home Screen**.
+- **Android/desktop (Chrome/Edge):** use the **Install** icon in the address bar,
+  or the browser menu → **Install app**.
+
+The service worker precaches the app shell and the SQLite Wasm binary, so cases
+run without a network connection after the first load.
+
 ## Project structure
 
 ```
@@ -84,7 +109,7 @@ add a `caseNN.js`, and register it in `src/cases/index.js`.
 
 ## Credits
 
-- Concept & design — Deductive Query team
+- Concept & design — Zahin Ukasyah
 - Main menu art — Rebecca Hu, Illustrator & Concept Artist
 - Inspired by **SQL Noir** and the **SQL Murder Mystery**
 - Built on sql.js, CodeMirror, TanStack Table, React, Vite, and Tailwind CSS

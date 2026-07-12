@@ -15,7 +15,7 @@ export default function Credits({ game }) {
       </header>
 
       <div className="space-y-5 text-sm text-zinc-400">
-        <Credit role="Concept & Design" who="Deductive Query team" />
+        <Credit role="Concept & Design" who="Zahin Ukasyah" />
         <Credit role="Main Menu Art" who="Rebecca Hu — Illustrator & Concept Artist" />
         <Credit role="SQL Engine" who="sql.js — SQLite compiled to WebAssembly" />
         <Credit role="Editor" who="CodeMirror 6" />
