@@ -45,11 +45,11 @@ body {
 }
 
 /*
- * Calm the editor's highlighting: only a subtle dark band marks the cursor's
- * line; drop the bright active-line-gutter and selection-match backgrounds.
+ * Remove the editor's line highlighting entirely — no active-line band, no
+ * active-gutter band, no selection-match tint.
  */
 .cm-editor .cm-activeLine {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: transparent;
 }
 .cm-editor .cm-activeLineGutter {
   background-color: transparent;

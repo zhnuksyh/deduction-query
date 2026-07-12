@@ -82,7 +82,7 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
               onChange={setSqlText}
               theme="dark"
               extensions={[sql({ dialect: SQLite, schema: schemaHints, upperCaseKeywords: true })]}
-              basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: true }}
+              basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: false }}
               placeholder="Write SQL here…"
             />
           )}
