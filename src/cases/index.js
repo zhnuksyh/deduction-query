@@ -1,10 +1,11 @@
 import { case01 } from './case01.js'
+import { case02 } from './case02.js'
+import { case03 } from './case03.js'
 
 /**
- * Cases 02–05 are locked placeholders for now. They carry enough metadata to
+ * Cases 04–05 are locked placeholders for now. They carry enough metadata to
  * render the filing-cabinet folders (code, tag, teaser, theme) but no playable
- * schema yet. Themes/tags mirror the GRID DAILY reference: DRIFT, FALLING,
- * FALLING, SIGNAL, AFTER WORK.
+ * schema yet.
  */
 const lockedStub = (over) => ({
   locked: true,
@@ -17,22 +18,8 @@ const lockedStub = (over) => ({
 
 export const CASES = [
   case01,
-  lockedStub({
-    id: 'case_02',
-    code: 'CODE_02',
-    tag: 'FALLING',
-    title: 'A Long Way Down',
-    folderTheme: 'fall',
-    teaser: 'A fall from the seventh floor. The physics say jump. The database says otherwise.',
-  }),
-  lockedStub({
-    id: 'case_03',
-    code: 'CODE_03',
-    tag: 'FALLING',
-    title: 'Terminal Velocity',
-    folderTheme: 'fall',
-    teaser: 'Two falls, one week apart, same stairwell. Coincidence has a foreign key.',
-  }),
+  case02,
+  case03,
   lockedStub({
     id: 'case_04',
     code: 'CODE_04',
