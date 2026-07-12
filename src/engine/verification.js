@@ -1,0 +1,63 @@
+/**
+ * The "Intercepted Deduction" tracker.
+ *
+ * After every query the player runs, we inspect the returned rows and decide
+ * which Report Card blanks should unlock. A blank unlocks when ANY returned row
+ * has `row[unlockedByColumn] === triggerValue` (compared loosely so 3 === "3").
+ *
+ * A case defines its blanks like:
+ *   blanks: {
+ *     suspectId: { label, targetValue, unlockedByColumn, triggerValue, options },
+ *     ...
+ *   }
+ *
+ * This function is pure: given the current unlock set and a fresh result, it
+ * returns the union of blanks that are now unlocked.
+ *
+ * @param {Record<string, {unlockedByColumn: string, triggerValue: unknown}>} blanks
+ * @param {Array<Record<string, unknown>>} rows
+ * @param {Set<string>} alreadyUnlocked
+ * @returns {{ unlocked: Set<string>, newlyUnlocked: string[] }}
+ */
+export function evaluateUnlocks(blanks, rows, alreadyUnlocked) {
+  const unlocked = new Set(alreadyUnlocked)
+  const newlyUnlocked = []
+
+  for (const [key, config] of Object.entries(blanks)) {
+    if (unlocked.has(key)) continue
+    const hit = rows.some((row) => looseEqual(row[config.unlockedByColumn], config.triggerValue))
+    if (hit) {
+      unlocked.add(key)
+      newlyUnlocked.push(key)
+    }
+  }
+
+  return { unlocked, newlyUnlocked }
+}
+
+/** Loose equality so INTEGER 3 matches the string "3", trimming text. */
+function looseEqual(a, b) {
+  if (a == null || b == null) return a === b
+  if (typeof a === 'string' && typeof b === 'string') {
+    return a.trim().toLowerCase() === b.trim().toLowerCase()
+  }
+  // eslint-disable-next-line eqeqeq
+  return a == b || String(a).trim() === String(b).trim()
+}
+
+/**
+ * Check whether the player's chosen answers match the case solution.
+ * @param {Record<string, {targetValue: unknown}>} blanks
+ * @param {Record<string, unknown>} answers  key -> chosen value
+ * @returns {{ correct: boolean, results: Record<string, boolean> }}
+ */
+export function gradeReport(blanks, answers) {
+  const results = {}
+  let correct = true
+  for (const [key, config] of Object.entries(blanks)) {
+    const ok = looseEqual(answers[key], config.targetValue)
+    results[key] = ok
+    if (!ok) correct = false
+  }
+  return { correct, results }
+}
