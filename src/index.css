@@ -76,3 +76,34 @@ body {
   writing-mode: vertical-rl;
   text-orientation: mixed;
 }
+
+/*
+ * Stagger helper for lists that animate in (menu items, level cards). Set
+ * --stagger-i on each child; the delay scales with its index so items cascade.
+ */
+.stagger-item {
+  animation-delay: calc(var(--stagger-i, 0) * 55ms);
+}
+
+/* Interactive press feedback: a quick, subtle scale-down on click. */
+.press {
+  transition: transform 0.08s ease-out;
+}
+.press:active {
+  transform: scale(0.96);
+}
+
+/*
+ * Accessibility: honour the OS "reduce motion" preference. All decorative
+ * animation collapses to an instant fade so the app stays fully usable and
+ * comfortable for motion-sensitive players.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
