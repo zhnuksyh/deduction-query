@@ -1,4 +1,4 @@
-# Deductive Query
+# Detective Query
 
 A browser-based murder mystery deduction game where you play as the **Detective**.
 Field agents upload physical evidence, interviews, and timelines into relational
@@ -70,7 +70,7 @@ builds and publishes to GitHub Pages on every push to `main`. To enable it:
 2. In the repo, go to **Settings → Pages → Build and deployment** and set
    **Source** to **GitHub Actions**.
 3. The next push to `main` (or a manual run from the **Actions** tab) deploys to
-   `https://<user>.github.io/deduction-query/`.
+   `https://<user>.github.io/detective-query/`.
 
 Because asset paths are relative, the same build also works on Netlify, Vercel,
 or any static host.

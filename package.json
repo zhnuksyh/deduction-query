@@ -1,9 +1,9 @@
 {
-  "name": "deduction-query",
+  "name": "detective-query",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "A browser-based mystery deduction game where you write SQL to crack forensic cases.",
+  "description": "A browser-based murder mystery deduction game where you write SQL to crack the case.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

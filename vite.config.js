@@ -18,8 +18,8 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
       manifest: {
-        name: 'Deductive Query',
-        short_name: 'Deductive Query',
+        name: 'Detective Query',
+        short_name: 'Detective Query',
         description:
           'A browser-based murder mystery deduction game where you write raw SQL to crack forensic cases.',
         theme_color: '#09090b',

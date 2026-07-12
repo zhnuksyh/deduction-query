@@ -8,7 +8,7 @@ Instructions for working in this repository.
 - **Never add a co-author.** Do not add `Co-Authored-By` trailers or any co-author attribution to commit messages.
 - **No pull requests.** Commit and push directly to the branch. Do not open PRs.
 
-## Project: Deductive Query
+## Project: Detective Query
 
 A browser-based mystery deduction game where players write raw SQL queries to solve
 forensic cases as a data analyst for the Bureau of Digital Forensics (B.D.F.).

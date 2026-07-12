@@ -9,7 +9,7 @@ const MENU = [
   { key: 'credits', label: 'CREDITS' },
 ]
 
-const REPO_URL = 'https://github.com/zhnuksyh/deduction-query'
+const REPO_URL = 'https://github.com/zhnuksyh/detective-query'
 const VERSION = 'v0.1.0'
 
 // A faint SQL snippet tiled behind the art for texture.
@@ -90,7 +90,7 @@ export default function MainMenu({ game, play }) {
           nudged further in from the left edge. */}
       <div className="relative flex h-full w-full flex-col justify-center pb-24 pl-24 pr-10 sm:pl-36">
         <h1 className="mb-10 font-display text-3xl font-black leading-none tracking-tight text-zinc-100 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-5xl">
-          DEDUCTIVE<span className="text-[#f26d78]">_</span>QUERY
+          DETECTIVE<span className="text-[#f26d78]">_</span>QUERY
         </h1>
 
         <ul className="flex w-full max-w-[220px] flex-col gap-2.5">
