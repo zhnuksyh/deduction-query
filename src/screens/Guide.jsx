@@ -69,7 +69,7 @@ export default function Guide({ game, play }) {
             <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
             main menu
           </button>
-          <h1 className="mt-3 font-display text-4xl font-black text-zinc-100">FIELD GUIDE</h1>
+          <h1 className="mt-3 font-display text-4xl font-black text-zinc-100">RULEBOOK</h1>
           <p className="mt-2 text-sm text-zinc-500">
             Everything you need to crack a case with SQL.
           </p>
