@@ -22,6 +22,7 @@ export default function Credits({ game }) {
         <Credit role="Data Grid" who="TanStack Table" />
         <Credit role="Frontend" who="React + Vite + Tailwind CSS" />
         <Credit role="Visual reference" who="GRID DAILY archive aesthetic" />
+        <Credit role="Inspired by" who="SQL Noir & SQL Murder Mystery" />
 
         <p className="border-t border-zinc-800 pt-5 text-xs text-zinc-600">
           All cases, suspects, and forensic data are entirely fictional. Any resemblance to
