@@ -33,7 +33,7 @@ const OPEN_PATH = CLOSED_PATH
 
 export default function TabBar({ tabs, active, onSelect }) {
   return (
-    <div className="relative z-10 flex items-end">
+    <div className="relative z-10 flex items-end pl-5">
       {tabs.map((t, i) => (
         <Tab
           key={t.key}

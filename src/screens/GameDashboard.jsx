@@ -62,7 +62,7 @@ export default function GameDashboard({ game }) {
   return (
     <div className="flex h-full w-full flex-col">
       {/* Case header */}
-      <header className="flex items-center justify-between border-b border-zinc-800 px-5 py-2.5">
+      <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
         <div className="flex items-center gap-4">
           <button
             onClick={() => game.setScreen('levels')}
@@ -79,8 +79,8 @@ export default function GameDashboard({ game }) {
       </header>
 
       {/* Folder-card: tabs stick out of the top of a white-outlined content box.
-          Centred with a max width and generous page padding on all sides. */}
-      <div className="flex min-h-0 flex-1 flex-col items-center px-8 pb-10 pt-6">
+          Centred with a max width and consistent page padding on all sides. */}
+      <div className="flex min-h-0 flex-1 flex-col items-center px-6 pb-6 pt-6">
         <div className="flex min-h-0 w-full max-w-4xl flex-1 flex-col">
           <TabBar tabs={TABS} active={tab} onSelect={setTab} />
 
