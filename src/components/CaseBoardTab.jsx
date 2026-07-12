@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { LockedCase } from './CrimeSceneTab.jsx'
 
 export default function CaseBoardTab({ caseData }) {
@@ -8,8 +8,7 @@ export default function CaseBoardTab({ caseData }) {
 }
 
 function Board({ tables }) {
-  // Foreign-key edges as stable { from, to } cell-key pairs. Memoized so the
-  // effect below doesn't re-run (and re-observe) on every render.
+  // Foreign-key edges as stable { from, to } cell-key pairs.
   const edges = useMemo(() => {
     const out = []
     tables.forEach((t) =>
@@ -39,27 +38,29 @@ function Board({ tables }) {
       if (!container) return
       const base = container.getBoundingClientRect()
       const next = []
-      for (const edge of edges) {
+      // Each edge gets its own vertical track in the left gutter so lines never
+      // sit on top of each other. Tracks are spaced 14px apart, closest to the
+      // cards first.
+      edges.forEach((edge, i) => {
         const a = cellRefs.current[edge.from]
         const b = cellRefs.current[edge.to]
-        if (!a || !b) continue
+        if (!a || !b) return
         const ra = a.getBoundingClientRect()
         const rb = b.getBoundingClientRect()
+        // Anchor on the LEFT edge of both cells; the whole route lives in the
+        // gutter to the left of every card, so it can't cross a table.
         const x1 = ra.left - base.left
         const y1 = ra.top - base.top + ra.height / 2
         const x2 = rb.left - base.left
         const y2 = rb.top - base.top + rb.height / 2
-        const gutter = Math.min(x1, x2) - 22
-        next.push(roundedElbow(x1, y1, x2, y2, gutter))
-      }
-      // Only update when the path set actually changed — this breaks the
-      // ResizeObserver feedback loop that caused "Maximum update depth exceeded".
+        const trackX = Math.min(x1, x2) - 18 - i * 14
+        next.push(roundedElbow(x1, y1, x2, y2, trackX))
+      })
       setPaths((prev) =>
         prev.length === next.length && prev.every((p, i) => p === next[i]) ? prev : next,
       )
     }
 
-    // Debounce through rAF so a burst of resize callbacks collapses to one pass.
     const schedule = () => {
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(measure)
@@ -76,18 +77,16 @@ function Board({ tables }) {
     }
   }, [edges])
 
+  // Reserve gutter width based on how many FK tracks we need.
+  const gutter = 40 + edges.length * 14
+
   return (
-    <div className="h-full overflow-auto px-6 py-8">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-8">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">
-            database anatomy
-          </div>
-          <h2 className="text-2xl font-semibold text-zinc-100">Case Board</h2>
-          <p className="mt-1 text-xs text-zinc-500">
-            The tables you can query. Curved lines trace foreign keys to the column they reference.
-          </p>
-        </div>
+    <div className="h-full overflow-auto px-8 py-8">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="mb-1 text-2xl font-semibold text-zinc-100">Case Board</h2>
+        <p className="mb-8 text-xs text-zinc-500">
+          The tables you can query. Curved lines trace foreign keys to the column they reference.
+        </p>
 
         <div ref={containerRef} className="relative">
           <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
@@ -96,7 +95,8 @@ function Board({ tables }) {
             ))}
           </svg>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Cards live in a single right-hand column; the left gutter is line-only. */}
+          <div className="flex flex-col gap-6" style={{ paddingLeft: gutter }}>
             {tables.map((t) => (
               <TableCard key={t.name} table={t} registerCell={registerCell} />
             ))}
@@ -138,20 +138,20 @@ function cellKey(table, col) {
 }
 
 /**
- * SVG path leaving the left edge of (x1,y1), routing down a shared left gutter,
- * and re-entering the left edge of (x2,y2), with rounded corners.
+ * SVG path leaving the left edge of (x1,y1), routing down a dedicated vertical
+ * track at trackX, and re-entering the left edge of (x2,y2), rounded corners.
  */
-function roundedElbow(x1, y1, x2, y2, gutterX) {
+function roundedElbow(x1, y1, x2, y2, trackX) {
   const r = 10
   const dir = y2 > y1 ? 1 : -1
   const vr = Math.min(r, Math.abs(y2 - y1) / 2)
-  const hr = Math.min(r, Math.abs(x1 - gutterX), Math.abs(x2 - gutterX))
+  const hr = Math.min(r, Math.abs(x1 - trackX), Math.abs(x2 - trackX))
   return [
     `M ${x1} ${y1}`,
-    `H ${gutterX + hr}`,
-    `Q ${gutterX} ${y1} ${gutterX} ${y1 + dir * vr}`,
+    `H ${trackX + hr}`,
+    `Q ${trackX} ${y1} ${trackX} ${y1 + dir * vr}`,
     `V ${y2 - dir * vr}`,
-    `Q ${gutterX} ${y2} ${gutterX + hr} ${y2}`,
+    `Q ${trackX} ${y2} ${trackX + hr} ${y2}`,
     `H ${x2}`,
   ].join(' ')
 }
