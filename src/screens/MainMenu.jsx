@@ -88,23 +88,28 @@ export default function MainMenu({ game, play }) {
 
       {/* Content: left-aligned title + menu, sitting slightly above centre and
           nudged further in from the left edge. */}
-      <div className="relative flex h-full w-full flex-col justify-center pb-24 pl-24 pr-10 sm:pl-36">
-        <h1 className="mb-10 font-display text-3xl font-black leading-none tracking-tight text-zinc-100 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-5xl">
+      <div className="relative flex h-full w-full flex-col justify-center pb-24 pl-32 pr-10 sm:pl-48">
+        <h1 className="mb-10 font-display text-4xl font-black leading-none tracking-tight text-zinc-100 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-6xl">
           DETECTIVE<span className="text-[#f26d78]">_</span>QUERY
         </h1>
 
-        <ul className="flex w-full max-w-[220px] flex-col gap-2.5">
-          {MENU.map((item, i) => (
-            <li key={item.key} className="stagger-item animate-fade-up" style={{ '--stagger-i': i }}>
-              <button
-                onClick={() => handle(item.key)}
-                onMouseEnter={() => play('hover')}
-                className="press w-full rounded-xl border border-white/10 bg-zinc-950/50 px-4 py-2.5 text-left font-display text-xs font-semibold uppercase tracking-[0.2em] text-zinc-300 backdrop-blur-sm transition-colors hover:border-[#f26d78]/70 hover:bg-zinc-950/70"
-              >
-                {item.label}
-              </button>
-            </li>
-          ))}
+        <ul className="flex w-full max-w-[240px] flex-col gap-2.5">
+          {MENU.map((item, i) => {
+            // Continue is only meaningful once there's a save to resume.
+            const disabled = item.key === 'continue' && !hasProgress
+            return (
+              <li key={item.key} className="stagger-item animate-fade-up" style={{ '--stagger-i': i }}>
+                <button
+                  onClick={() => !disabled && handle(item.key)}
+                  onMouseEnter={() => !disabled && play('hover')}
+                  disabled={disabled}
+                  className="press w-full rounded-xl border border-white/10 bg-zinc-950/50 px-5 py-3 text-left font-display text-sm font-semibold uppercase tracking-[0.2em] text-zinc-300 backdrop-blur-sm transition-colors hover:border-[#f26d78]/70 hover:bg-zinc-950/70 disabled:cursor-not-allowed disabled:border-white/5 disabled:text-zinc-600 disabled:hover:border-white/5 disabled:hover:bg-zinc-950/50"
+                >
+                  {item.label}
+                </button>
+              </li>
+            )
+          })}
         </ul>
       </div>
 
