@@ -1,4 +1,4 @@
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 // Curated beginner SQL video tutorials (open in a new tab).
 const VIDEOS = [
@@ -32,24 +32,39 @@ const CLAUSES = [
     ex: "SELECT * FROM keycard_logs WHERE wing = 'East Wing';",
   },
   {
-    kw: 'JOIN … ON',
-    desc: 'Combine two tables by a matching column (usually a key).',
-    ex: 'SELECT s.name, a.statement\nFROM suspects s\nJOIN alibis a ON a.suspect_id = s.id;',
+    kw: 'LIKE',
+    desc: 'Match text by pattern: % = any run of characters, _ = one character.',
+    ex: "SELECT * FROM alibis WHERE statement LIKE '%never%';",
   },
   {
-    kw: 'ORDER BY',
-    desc: 'Sort the results, ascending (default) or DESC.',
-    ex: 'SELECT * FROM keycard_logs ORDER BY swipe_time;',
-  },
-  {
-    kw: 'GROUP BY … COUNT',
-    desc: 'Bucket rows and count/aggregate within each bucket.',
-    ex: 'SELECT suspect_id, COUNT(*) FROM keycard_logs\nGROUP BY suspect_id;',
+    kw: 'IN',
+    desc: 'Match any value from a set — shorter than chaining ORs.',
+    ex: "SELECT * FROM suspects WHERE relationship IN ('Ex-husband', 'Rival');",
   },
   {
     kw: 'AND / OR / BETWEEN',
     desc: 'Combine conditions; BETWEEN checks a range (inclusive).',
     ex: "SELECT * FROM keycard_logs\nWHERE swipe_time BETWEEN '23:10' AND '23:25';",
+  },
+  {
+    kw: 'JOIN … ON',
+    desc: 'Combine two tables by a matching column (usually a key).',
+    ex: 'SELECT s.name, a.statement\nFROM suspects s\nJOIN alibis a ON a.suspect_id = s.id;',
+  },
+  {
+    kw: 'ORDER BY … LIMIT',
+    desc: 'Sort the results (DESC to reverse) and cap how many rows come back.',
+    ex: 'SELECT * FROM keycard_logs\nORDER BY swipe_time DESC LIMIT 5;',
+  },
+  {
+    kw: 'DISTINCT',
+    desc: 'Drop duplicate rows/values — handy for “how many different …”.',
+    ex: 'SELECT COUNT(DISTINCT incident_id) FROM access_logs;',
+  },
+  {
+    kw: 'GROUP BY … HAVING',
+    desc: 'Bucket rows to aggregate (COUNT, SUM…); HAVING filters the buckets.',
+    ex: 'SELECT suspect_id, COUNT(*) FROM keycard_logs\nGROUP BY suspect_id HAVING COUNT(*) > 1;',
   },
 ]
 
@@ -69,7 +84,7 @@ export default function Guide({ game, play }) {
             <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
             main menu
           </button>
-          <h1 className="mt-3 font-display text-4xl font-black text-zinc-100">RULEBOOK</h1>
+          <h1 className="mt-3 font-display text-4xl font-black text-zinc-100">GUIDE BOOK</h1>
           <p className="mt-2 text-sm text-zinc-500">
             Everything you need to crack a case with SQL.
           </p>
@@ -134,8 +149,9 @@ export default function Guide({ game, play }) {
                   <div className="text-sm font-medium text-zinc-200">{v.title}</div>
                   <div className="text-xs text-zinc-500">{v.by}</div>
                 </div>
-                <span className="shrink-0 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
-                  watch ↗
+                <span className="flex shrink-0 items-center gap-1 text-[10px] font-bold uppercase leading-none tracking-widest text-zinc-500">
+                  <span className="pt-px">watch</span>
+                  <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} />
                 </span>
               </a>
             ))}
