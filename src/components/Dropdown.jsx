@@ -35,12 +35,12 @@ export default function Dropdown({ value, options, onChange, tone = 'idle', plac
     // then translated to the line's optical middle so it's never high or low.
     <span
       ref={ref}
-      className="relative mx-1 inline-flex h-0 w-[8.5rem] align-middle"
+      className="relative mx-1.5 inline-flex h-0 w-[10rem] align-middle"
     >
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={`absolute left-0 top-1/2 flex w-full -translate-y-1/2 items-center justify-center rounded-full border bg-zinc-950 px-4 py-2 text-sm leading-none transition-colors focus:outline-none ${toneCls}`}
+        className={`absolute left-0 top-1/2 flex w-full -translate-y-1/2 items-center justify-center rounded-full border bg-zinc-950 px-5 py-2.5 text-sm leading-none transition-colors focus:outline-none ${toneCls}`}
       >
         <span className={value ? '' : 'text-zinc-600'}>{value || placeholder}</span>
       </button>
