@@ -1,13 +1,16 @@
 import { ChevronLeft } from 'lucide-react'
 
-export default function Options({ game }) {
+export default function Options({ game, play }) {
   const { settings } = game.save
 
   return (
     <div className="mx-auto flex h-full w-full max-w-xl flex-col justify-center px-6">
       <header className="mb-8 border-b border-zinc-800 pb-4">
         <button
-          onClick={() => game.setScreen('menu')}
+          onClick={() => {
+            play('back')
+            game.setScreen('menu')
+          }}
           className="flex items-center gap-1 text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
         >
           <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
@@ -21,7 +24,14 @@ export default function Options({ game }) {
           label="Sound"
           desc="UI blips and confirmations."
           value={settings.sound}
-          onChange={(v) => game.setSettings({ sound: v })}
+          onChange={(v) => {
+            game.setSettings({ sound: v })
+            // Give audible confirmation when enabling. The engine's mute flag
+            // syncs via an effect after render, so defer the blip a tick so it
+            // isn't swallowed while the flag is still "muted".
+            if (v) setTimeout(() => play('toggle'), 0)
+            else play('toggle') // still audible: unmute happens on next render
+          }}
         />
 
         <div>
@@ -44,10 +54,11 @@ export default function Options({ game }) {
           <button
             onClick={() => {
               if (confirm('Erase all progress, notebooks, and unlocks? This cannot be undone.')) {
+                play('back')
                 game.hardReset()
               }
             }}
-            className="border border-crimson-dim px-4 py-2 text-xs font-bold uppercase tracking-widest text-crimson hover:bg-crimson hover:text-zinc-950"
+            className="press border border-crimson-dim px-4 py-2 text-xs font-bold uppercase tracking-widest text-crimson hover:bg-crimson hover:text-zinc-950"
           >
             Reset all progress
           </button>
@@ -66,7 +77,7 @@ function Toggle({ label, desc, value, onChange }) {
       </div>
       <button
         onClick={() => onChange(!value)}
-        className={`h-7 w-14 rounded-full border transition-colors ${
+        className={`press h-7 w-14 rounded-full border transition-colors ${
           value ? 'border-zinc-700 bg-zinc-700' : 'border-zinc-700 bg-zinc-800'
         }`}
       >

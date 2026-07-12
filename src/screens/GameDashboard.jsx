@@ -15,9 +15,14 @@ const TABS = [
   { key: 'report', label: 'REPORT CARD' },
 ]
 
-export default function GameDashboard({ game }) {
+export default function GameDashboard({ game, play }) {
   const caseData = getCase(game.openCaseId)
   const [tab, setTab] = useState('scene')
+
+  const selectTab = (key) => {
+    if (key !== tab) play('tab')
+    setTab(key)
+  }
   const [db, setDb] = useState(null)
   const [dbError, setDbError] = useState(null)
 
@@ -69,7 +74,10 @@ export default function GameDashboard({ game }) {
         <div className="mx-auto flex min-h-[1.25rem] w-full max-w-4xl items-center justify-between">
           <div className="flex items-center gap-4">
             <button
-              onClick={() => game.setScreen('levels')}
+              onClick={() => {
+                play('back')
+                game.setScreen('levels')
+              }}
               className="flex items-center gap-1 text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
             >
               <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
@@ -90,30 +98,35 @@ export default function GameDashboard({ game }) {
           Centred with a max width and consistent page padding on all sides. */}
       <div className="flex min-h-0 flex-1 flex-col items-center px-6 pb-6 pt-6">
         <div className="flex min-h-0 w-full max-w-4xl flex-1 flex-col">
-          <TabBar tabs={TABS} active={tab} onSelect={setTab} />
+          <TabBar tabs={TABS} active={tab} onSelect={selectTab} />
 
-          {/* -1px top margin lets the active tab's open bottom merge into the card. */}
+          {/* -1px top margin lets the active tab's open bottom merge into the card.
+              Keyed on `tab` so switching replays a soft fade-up on the panel. */}
           <main className="-mt-px min-h-0 flex-1 overflow-hidden rounded-2xl border border-zinc-100 bg-zinc-950">
-            {tab === 'scene' && <CrimeSceneTab caseData={caseData} />}
-            {tab === 'board' && <CaseBoardTab caseData={caseData} />}
-            {tab === 'analysis' && (
-              <AnalysisTab
-                caseData={caseData}
-                db={db}
-                dbError={dbError}
-                game={game}
-                unlocked={unlocked}
-                onUnlocksChange={persistUnlocks}
-              />
-            )}
-            {tab === 'report' && (
-              <ReportCardTab
-                caseData={caseData}
-                unlocked={unlocked}
-                game={game}
-                goToAnalysis={() => setTab('analysis')}
-              />
-            )}
+            <div key={tab} className="h-full animate-fade-up">
+              {tab === 'scene' && <CrimeSceneTab caseData={caseData} />}
+              {tab === 'board' && <CaseBoardTab caseData={caseData} />}
+              {tab === 'analysis' && (
+                <AnalysisTab
+                  caseData={caseData}
+                  db={db}
+                  dbError={dbError}
+                  game={game}
+                  play={play}
+                  unlocked={unlocked}
+                  onUnlocksChange={persistUnlocks}
+                />
+              )}
+              {tab === 'report' && (
+                <ReportCardTab
+                  caseData={caseData}
+                  unlocked={unlocked}
+                  game={game}
+                  play={play}
+                  goToAnalysis={() => selectTab('analysis')}
+                />
+              )}
+            </div>
           </main>
         </div>
       </div>

@@ -1,11 +1,14 @@
 import { ChevronLeft } from 'lucide-react'
 
-export default function Credits({ game }) {
+export default function Credits({ game, play }) {
   return (
     <div className="mx-auto flex h-full w-full max-w-xl flex-col justify-center px-6">
       <header className="mb-8 border-b border-zinc-800 pb-4">
         <button
-          onClick={() => game.setScreen('menu')}
+          onClick={() => {
+            play('back')
+            game.setScreen('menu')
+          }}
           className="flex items-center gap-1 text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
         >
           <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />

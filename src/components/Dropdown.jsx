@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
  * <select> won't let us round/skin the option list). Closes on outside-click
  * or Escape. `tone` picks the border/text accent for graded states.
  */
-export default function Dropdown({ value, options, onChange, tone = 'idle' }) {
+export default function Dropdown({ value, options, onChange, tone = 'idle', play }) {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -40,7 +40,10 @@ export default function Dropdown({ value, options, onChange, tone = 'idle' }) {
       <span className="absolute left-0 top-1/2 w-full -translate-y-1/2">
         <button
           type="button"
-          onClick={() => setOpen((o) => !o)}
+          onClick={() => {
+            play?.(open ? 'select' : 'open')
+            setOpen((o) => !o)
+          }}
           className={`flex w-full items-center justify-center rounded-full border bg-zinc-950 px-4 py-1.5 text-sm transition-colors focus:outline-none ${toneCls}`}
         >
           {/* Non-breaking space keeps a full-height line box when the value is empty. */}
@@ -48,12 +51,13 @@ export default function Dropdown({ value, options, onChange, tone = 'idle' }) {
         </button>
 
         {open && (
-          <div className="absolute left-0 top-full z-30 mt-1 w-full overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900 py-1 shadow-xl shadow-black/40">
+          <div className="absolute left-0 top-full z-30 mt-1 w-full origin-top animate-pop-in overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900 py-1 shadow-xl shadow-black/40">
             {options.map((opt) => (
               <button
                 key={opt}
                 type="button"
                 onClick={() => {
+                  play?.('select')
                   onChange(opt)
                   setOpen(false)
                 }}

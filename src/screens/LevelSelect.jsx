@@ -3,12 +3,13 @@ import { ChevronLeft, ChevronRight, Lock } from 'lucide-react'
 import { CASES, isCaseUnlocked } from '../cases/index.js'
 import CaseStamp from '../components/CaseStamp.jsx'
 
-export default function LevelSelect({ game }) {
+export default function LevelSelect({ game, play }) {
   const { save } = game
   const trackRef = useRef(null)
 
   // Scroll the carousel by roughly one card width per click.
   const scrollByCard = (dir) => {
+    play('tab')
     const track = trackRef.current
     if (!track) return
     const card = track.querySelector('[data-card]')
@@ -25,7 +26,10 @@ export default function LevelSelect({ game }) {
       <header className="px-6 pb-4 pt-8">
         <div className="mx-auto flex min-h-[1.25rem] w-full max-w-4xl items-center">
           <button
-            onClick={() => game.setScreen('menu')}
+            onClick={() => {
+              play('back')
+              game.setScreen('menu')
+            }}
             className="flex items-center gap-1 text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
           >
             <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
@@ -58,9 +62,15 @@ export default function LevelSelect({ game }) {
                 <Folder
                   key={c.id}
                   c={c}
+                  index={i}
                   unlocked={unlocked}
                   solved={solved}
-                  onOpen={() => unlocked && game.openCase(c.id)}
+                  onOpen={() => {
+                    if (!unlocked) return
+                    play('click')
+                    game.openCase(c.id)
+                  }}
+                  onHover={() => unlocked && play('hover')}
                 />
               )
             })}
@@ -76,7 +86,7 @@ function CarouselButton({ dir, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900 text-zinc-400 transition-colors hover:border-zinc-500 hover:text-zinc-100"
+      className="press flex h-9 w-9 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900 text-zinc-400 transition-colors hover:border-zinc-500 hover:text-zinc-100"
       aria-label={dir === 'left' ? 'Previous' : 'Next'}
     >
       <Icon className="h-4 w-4" strokeWidth={2} />
@@ -87,12 +97,13 @@ function CarouselButton({ dir, onClick }) {
 // Each card is 1/3 of the track width (minus the gaps) so exactly three show.
 const CARD_WIDTH = 'w-[calc((100%-2rem)/3)]'
 
-function Folder({ c, unlocked, solved, onOpen }) {
+function Folder({ c, index = 0, unlocked, solved, onOpen, onHover }) {
   if (!unlocked) {
     return (
       <div
         data-card
-        className={`${CARD_WIDTH} flex min-h-0 shrink-0 snap-start cursor-not-allowed flex-col items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-800/60 px-5 py-6`}
+        style={{ '--stagger-i': index }}
+        className={`${CARD_WIDTH} stagger-item flex min-h-0 shrink-0 animate-fade-up snap-start cursor-not-allowed flex-col items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-800/60 px-5 py-6`}
       >
         <Lock className="h-7 w-7 text-zinc-600" strokeWidth={1.5} />
       </div>
@@ -103,7 +114,9 @@ function Folder({ c, unlocked, solved, onOpen }) {
     <button
       data-card
       onClick={onOpen}
-      className={`${CARD_WIDTH} group relative flex min-h-0 shrink-0 snap-start flex-col justify-between overflow-hidden rounded-2xl border border-zinc-100 bg-zinc-950 px-5 py-5 text-left text-zinc-200 transition-transform hover:-translate-y-1.5 focus:-translate-y-1.5`}
+      onMouseEnter={onHover}
+      style={{ '--stagger-i': index }}
+      className={`${CARD_WIDTH} stagger-item group relative flex min-h-0 shrink-0 animate-fade-up snap-start flex-col justify-between overflow-hidden rounded-2xl border border-zinc-100 bg-zinc-950 px-5 py-5 text-left text-zinc-200 transition-transform duration-200 hover:-translate-y-1.5 focus:-translate-y-1.5`}
     >
       {/* Vertical file code down the top-right corner. Letters are heavy; the
           "_" and "/" separators are thin for contrast. */}

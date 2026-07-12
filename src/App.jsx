@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { useGame } from './state/useGame.js'
+import { useSound } from './state/useSound.js'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MainMenu from './screens/MainMenu.jsx'
 import LevelSelect from './screens/LevelSelect.jsx'
@@ -13,6 +14,7 @@ const GameDashboard = lazy(() => import('./screens/GameDashboard.jsx'))
 
 export default function App() {
   const game = useGame()
+  const play = useSound(game)
 
   return (
     <div
@@ -20,15 +22,19 @@ export default function App() {
       style={{ fontSize: `${game.save.settings.textScale}rem` }}
     >
       <ErrorBoundary>
-        {game.screen === 'menu' && <MainMenu game={game} />}
-        {game.screen === 'levels' && <LevelSelect game={game} />}
-        {game.screen === 'options' && <Options game={game} />}
-        {game.screen === 'credits' && <Credits game={game} />}
-        {game.screen === 'game' && (
-          <Suspense fallback={<DashboardLoading />}>
-            <GameDashboard game={game} />
-          </Suspense>
-        )}
+        {/* Keyed wrapper: remounting on screen change replays the fade-up,
+            giving every screen a smooth entrance transition. */}
+        <div key={game.screen} className="h-full w-full animate-fade-up">
+          {game.screen === 'menu' && <MainMenu game={game} play={play} />}
+          {game.screen === 'levels' && <LevelSelect game={game} play={play} />}
+          {game.screen === 'options' && <Options game={game} play={play} />}
+          {game.screen === 'credits' && <Credits game={game} play={play} />}
+          {game.screen === 'game' && (
+            <Suspense fallback={<DashboardLoading />}>
+              <GameDashboard game={game} play={play} />
+            </Suspense>
+          )}
+        </div>
       </ErrorBoundary>
     </div>
   )

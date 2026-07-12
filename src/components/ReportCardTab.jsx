@@ -4,7 +4,7 @@ import { LockedCase } from './CrimeSceneTab.jsx'
 import Dropdown from './Dropdown.jsx'
 import CaseStamp from './CaseStamp.jsx'
 
-export default function ReportCardTab({ caseData, unlocked, game }) {
+export default function ReportCardTab({ caseData, unlocked, game, play }) {
   const report = caseData.report
   const [answers, setAnswers] = useState({})
   const [graded, setGraded] = useState(null)
@@ -19,7 +19,12 @@ export default function ReportCardTab({ caseData, unlocked, game }) {
   const submit = () => {
     const res = gradeReport(report.blanks, answers)
     setGraded(res)
-    if (res.correct) game.markSolved(caseData.id)
+    if (res.correct) {
+      game.markSolved(caseData.id)
+      play('solved')
+    } else {
+      play('error')
+    }
   }
 
   // Split the template on {{tokens}} and interleave dropdowns.
@@ -32,7 +37,10 @@ export default function ReportCardTab({ caseData, unlocked, game }) {
       <div className="relative mx-auto max-w-3xl">
         {/* Completion stamp overlays the top-right once the report is correct. */}
         {stamped && (
-          <CaseStamp className="absolute -top-2 right-0 z-20 scale-150" rotate={-16} />
+          <CaseStamp
+            className="absolute -top-2 right-0 z-20 origin-center scale-150 animate-stamp-in"
+            rotate={-16}
+          />
         )}
 
         <div className="mb-6">
@@ -65,6 +73,7 @@ export default function ReportCardTab({ caseData, unlocked, game }) {
                 key={i}
                 value={answers[key] || ''}
                 options={options}
+                play={play}
                 tone={isRight ? 'right' : isWrong ? 'wrong' : 'idle'}
                 onChange={(v) => {
                   setAnswers((a) => ({ ...a, [key]: v }))
@@ -78,7 +87,7 @@ export default function ReportCardTab({ caseData, unlocked, game }) {
         {/* Result banner */}
         {graded && (
           <div
-            className={`mt-6 rounded-xl border p-4 text-sm ${
+            className={`mt-6 animate-pop-in rounded-xl border p-4 text-sm ${
               graded.correct
                 ? 'border-zinc-500 bg-zinc-800/40 text-zinc-300'
                 : 'border-crimson bg-crimson-dim/10 text-crimson'
@@ -95,7 +104,7 @@ export default function ReportCardTab({ caseData, unlocked, game }) {
           <button
             onClick={submit}
             disabled={!allAnswered}
-            className="rounded-lg bg-crimson px-8 py-3 text-sm font-semibold uppercase tracking-widest text-zinc-950 transition-colors hover:bg-crimson/80 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-600"
+            className="press rounded-lg bg-crimson px-8 py-3 text-sm font-semibold uppercase tracking-widest text-zinc-950 transition-colors hover:bg-crimson/80 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-600"
           >
             {alreadySolved ? 'resubmit report' : 'submit report'}
           </button>

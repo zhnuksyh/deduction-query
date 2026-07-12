@@ -18,7 +18,7 @@ JOIN forensics ON forensics.case_id = cases.id
 GROUP BY suspect_id HAVING count(*) > 1
 `.repeat(6)
 
-export default function MainMenu({ game }) {
+export default function MainMenu({ game, play }) {
   const [confirmNew, setConfirmNew] = useState(false)
 
   // There's meaningful progress if any case is solved or a case was opened.
@@ -33,6 +33,7 @@ export default function MainMenu({ game }) {
   }
 
   const handle = (key) => {
+    play('click')
     switch (key) {
       case 'new':
         // Starting fresh wipes progress — confirm first if there's any.
@@ -90,11 +91,12 @@ export default function MainMenu({ game }) {
         </h1>
 
         <ul className="flex w-full max-w-[220px] flex-col gap-2.5">
-          {MENU.map((item) => (
-            <li key={item.key}>
+          {MENU.map((item, i) => (
+            <li key={item.key} className="stagger-item animate-fade-up" style={{ '--stagger-i': i }}>
               <button
                 onClick={() => handle(item.key)}
-                className="w-full rounded-xl border border-white/10 bg-zinc-950/50 px-4 py-2.5 text-left font-display text-xs font-semibold uppercase tracking-[0.2em] text-zinc-300 backdrop-blur-sm transition-colors hover:border-[#f26d78]/70 hover:bg-zinc-950/70"
+                onMouseEnter={() => play('hover')}
+                className="press w-full rounded-xl border border-white/10 bg-zinc-950/50 px-4 py-2.5 text-left font-display text-xs font-semibold uppercase tracking-[0.2em] text-zinc-300 backdrop-blur-sm transition-colors hover:border-[#f26d78]/70 hover:bg-zinc-950/70"
               >
                 {item.label}
               </button>
@@ -105,8 +107,8 @@ export default function MainMenu({ game }) {
 
       {/* Confirm overwriting an existing save before starting a new game. */}
       {confirmNew && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-zinc-950/70 backdrop-blur-sm">
-          <div className="mx-6 w-full max-w-sm rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl">
+        <div className="absolute inset-0 z-50 flex animate-fade-in items-center justify-center bg-zinc-950/70 backdrop-blur-sm">
+          <div className="mx-6 w-full max-w-sm animate-pop-in rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl">
             <h2 className="font-display text-lg font-bold uppercase tracking-wide text-zinc-100">
               Start a new game?
             </h2>
@@ -116,17 +118,21 @@ export default function MainMenu({ game }) {
             </p>
             <div className="mt-6 flex justify-end gap-3">
               <button
-                onClick={() => setConfirmNew(false)}
-                className="rounded-lg border border-zinc-700 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
+                onClick={() => {
+                  play('back')
+                  setConfirmNew(false)
+                }}
+                className="press rounded-lg border border-zinc-700 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
               >
                 Cancel
               </button>
               <button
                 onClick={() => {
+                  play('click')
                   setConfirmNew(false)
                   startNewGame()
                 }}
-                className="rounded-lg bg-crimson px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-crimson/80"
+                className="press rounded-lg bg-crimson px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-crimson/80"
               >
                 Erase &amp; start
               </button>

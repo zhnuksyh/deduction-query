@@ -8,7 +8,7 @@ import { LockedCase } from './CrimeSceneTab.jsx'
 
 const STARTER = '-- Query the evidence. Try:\nSELECT * FROM suspects;'
 
-export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onUnlocksChange }) {
+export default function AnalysisTab({ caseData, db, dbError, game, play, unlocked, onUnlocksChange }) {
   const [sqlText, setSqlText] = useState(STARTER)
   const [result, setResult] = useState(null)
   const [flash, setFlash] = useState(null) // toast for newly unlocked clues
@@ -23,24 +23,40 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
 
   const execute = useCallback(() => {
     if (!db) return
+    play('run')
     const res = runQuery(db, sqlText)
     setResult(res)
 
+    if (res.error) {
+      play('error')
+      return
+    }
+
     // Intercept: check the returned rows against the case verification matrix.
-    if (!res.error && caseData.report?.blanks) {
+    let unlockedSomething = false
+    if (caseData.report?.blanks) {
       const { unlocked: nextUnlocked, newlyUnlocked } = evaluateUnlocks(
         caseData.report.blanks,
         res.rows,
         unlocked,
       )
       if (newlyUnlocked.length > 0) {
+        unlockedSomething = true
         onUnlocksChange(nextUnlocked)
         const labels = newlyUnlocked.map((k) => caseData.report.blanks[k].label).join(', ')
         setFlash(`CLUE VERIFIED → ${labels}`)
         setTimeout(() => setFlash(null), 4000)
       }
     }
-  }, [db, sqlText, caseData.report, unlocked, onUnlocksChange])
+
+    // A verified clue gets its own celebratory chime; otherwise the plain
+    // "query returned" confirmation. The unlock sound trails the run tick.
+    if (unlockedSomething) {
+      setTimeout(() => play('unlock'), 120)
+    } else {
+      play('success')
+    }
+  }, [db, sqlText, caseData.report, unlocked, onUnlocksChange, play])
 
   // Ctrl/Cmd+Enter to run.
   const onKeyDown = (e) => {
@@ -67,7 +83,7 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
             <button
               onClick={execute}
               disabled={!db}
-              className="rounded-full bg-zinc-100 px-5 py-1.5 text-[11px] font-bold uppercase tracking-widest text-zinc-950 transition-colors hover:bg-white disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-500"
+              className="press rounded-full bg-zinc-100 px-5 py-1.5 text-[11px] font-bold uppercase tracking-widest text-zinc-950 transition-colors hover:bg-white disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-500"
             >
               RUN
             </button>
@@ -109,7 +125,7 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
           <ResultsTable result={result} />
 
           {flash && (
-            <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 border border-zinc-500 bg-zinc-900 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-zinc-300 shadow-lg">
+            <div className="pointer-events-none absolute bottom-3 left-1/2 animate-toast-up border border-teal/60 bg-zinc-900 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-teal shadow-lg shadow-teal/10">
               {flash}
             </div>
           )}

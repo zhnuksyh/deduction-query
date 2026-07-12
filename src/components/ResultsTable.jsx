@@ -71,7 +71,7 @@ export default function ResultsTable({ result }) {
   }
 
   return (
-    <div className="h-full overflow-auto">
+    <div className="h-full animate-fade-in overflow-auto">
       <table className="w-full border-collapse text-xs">
         <thead className="sticky top-0 z-10 bg-zinc-800">
           {table.getHeaderGroups().map((hg) => (
