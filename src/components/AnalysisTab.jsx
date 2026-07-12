@@ -66,7 +66,7 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
             <button
               onClick={execute}
               disabled={!db}
-              className="rounded-full bg-crimson px-5 py-1.5 text-[11px] font-bold uppercase tracking-widest text-zinc-950 transition-colors hover:bg-crimson/80 disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-500"
+              className="rounded-full bg-zinc-100 px-5 py-1.5 text-[11px] font-bold uppercase tracking-widest text-zinc-950 transition-colors hover:bg-white disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-500"
             >
               RUN
             </button>
