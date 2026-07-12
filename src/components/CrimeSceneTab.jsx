@@ -27,14 +27,14 @@ export default function CrimeSceneTab({ caseData }) {
         </div>
 
         {/* Forensic constraints */}
-        <div className="mt-8 border border-teal-dim/40 bg-teal-dim/5 p-4">
-          <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.25em] text-teal">
+        <div className="mt-8 border border-zinc-700 bg-zinc-900/40 p-4">
+          <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-300">
             forensic constraints
           </div>
           <ul className="space-y-2">
             {scene.constraints.map((c, i) => (
               <li key={i} className="flex gap-2 text-sm text-zinc-300">
-                <span className="text-teal">▸</span>
+                <span className="text-zinc-300">▸</span>
                 <span>{c}</span>
               </li>
             ))}

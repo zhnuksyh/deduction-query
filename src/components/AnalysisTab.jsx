@@ -99,14 +99,14 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
         </div>
         <div className="relative min-h-0 flex-1">
           {!db && !dbError && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950/70 text-xs text-teal">
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950/70 text-xs text-zinc-300">
               compiling sql.js runtime…
             </div>
           )}
           <ResultsTable result={result} />
 
           {flash && (
-            <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 border border-teal bg-zinc-900 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-teal shadow-lg">
+            <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 border border-zinc-500 bg-zinc-900 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-zinc-300 shadow-lg">
               {flash}
             </div>
           )}

@@ -76,7 +76,7 @@ export default function ResultsTable({ result }) {
                   <th
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
-                    className="cursor-pointer select-none whitespace-nowrap border-b border-zinc-700 px-3 py-2 text-left font-bold uppercase tracking-wider text-teal hover:text-teal/80"
+                    className="cursor-pointer select-none whitespace-nowrap border-b border-zinc-700 px-3 py-2 text-left font-bold uppercase tracking-wider text-zinc-300 hover:text-zinc-100/80"
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                     <span className="ml-1 text-zinc-600">

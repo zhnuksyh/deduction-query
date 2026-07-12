@@ -18,7 +18,7 @@ export default function LevelSelect({ game }) {
       <header className="flex items-center px-6 py-4">
         <button
           onClick={() => game.setScreen('menu')}
-          className="flex h-10 w-10 items-center justify-center border border-zinc-700 bg-zinc-900 text-lg text-zinc-400 transition-colors hover:border-teal hover:text-teal"
+          className="flex h-10 w-10 items-center justify-center border border-zinc-700 bg-zinc-900 text-lg text-zinc-400 transition-colors hover:border-zinc-500 hover:text-zinc-100"
           title="Main menu"
         >
           &times;

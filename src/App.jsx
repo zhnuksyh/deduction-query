@@ -39,13 +39,13 @@ function DashboardLoading() {
   return (
     <div className="flex h-full w-full items-center justify-center">
       <div className="text-center">
-        <div className="mb-3 text-[11px] uppercase tracking-[0.3em] text-teal">
+        <div className="mb-3 text-[11px] uppercase tracking-[0.3em] text-zinc-300">
           loading case workspace
         </div>
-        <pre className="text-[11px] leading-relaxed text-teal/70">
+        <pre className="text-[11px] leading-relaxed text-zinc-300/70">
 {`> fetching editor + data grid ...
 > preparing sql.js runtime ...`}
-          <span className="ml-0.5 inline-block h-3 w-2 animate-blink bg-teal align-middle" />
+          <span className="ml-0.5 inline-block h-3 w-2 animate-blink bg-zinc-400 align-middle" />
         </pre>
       </div>
     </div>

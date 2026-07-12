@@ -48,7 +48,7 @@ export default function GameDashboard({ game }) {
     return (
       <div className="flex h-full items-center justify-center text-zinc-500">
         Case not found.{' '}
-        <button className="ml-2 text-teal underline" onClick={() => game.setScreen('levels')}>
+        <button className="ml-2 text-zinc-300 underline" onClick={() => game.setScreen('levels')}>
           back to files
         </button>
       </div>
@@ -66,7 +66,7 @@ export default function GameDashboard({ game }) {
         <div className="flex items-center gap-4">
           <button
             onClick={() => game.setScreen('levels')}
-            className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-teal"
+            className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
           >
             &larr; files
           </button>

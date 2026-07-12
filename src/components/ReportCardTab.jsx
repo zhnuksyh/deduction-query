@@ -42,7 +42,7 @@ export default function ReportCardTab({ caseData, unlocked, game, goToAnalysis }
               key={key}
               className={`inline-flex items-center gap-1.5 border px-2 py-1 text-[10px] uppercase tracking-widest ${
                 unlocked.has(key)
-                  ? 'border-teal-dim bg-teal-dim/10 text-teal'
+                  ? 'border-zinc-700 bg-zinc-800/40 text-zinc-300'
                   : 'border-zinc-800 text-zinc-600'
               }`}
             >
@@ -85,10 +85,10 @@ export default function ReportCardTab({ caseData, unlocked, game, goToAnalysis }
                 }}
                 className={`mx-1 inline-block rounded border bg-zinc-950 px-2 py-0.5 align-middle text-sm focus:outline-none ${
                   isRight
-                    ? 'border-teal text-teal'
+                    ? 'border-zinc-500 text-zinc-300'
                     : isWrong
                       ? 'border-crimson text-crimson'
-                      : 'border-teal-dim text-zinc-100'
+                      : 'border-zinc-700 text-zinc-100'
                 }`}
               >
                 <option value="" disabled>
@@ -127,7 +127,7 @@ export default function ReportCardTab({ caseData, unlocked, game, goToAnalysis }
           <div
             className={`mt-6 border p-4 text-sm ${
               graded.correct
-                ? 'border-teal bg-teal-dim/10 text-teal'
+                ? 'border-zinc-500 bg-zinc-800/40 text-zinc-300'
                 : 'border-crimson bg-crimson-dim/10 text-crimson'
             }`}
           >
@@ -141,7 +141,7 @@ export default function ReportCardTab({ caseData, unlocked, game, goToAnalysis }
         <div className="mt-6 flex items-center justify-between">
           <button
             onClick={goToAnalysis}
-            className="text-[11px] uppercase tracking-[0.25em] text-zinc-500 hover:text-teal"
+            className="text-[11px] uppercase tracking-[0.25em] text-zinc-500 hover:text-zinc-100"
           >
             &larr; back to analysis
           </button>

@@ -4,7 +4,7 @@ export default function Credits({ game }) {
       <header className="mb-8 border-b border-zinc-800 pb-4">
         <button
           onClick={() => game.setScreen('menu')}
-          className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-teal"
+          className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
         >
           &larr; main menu
         </button>

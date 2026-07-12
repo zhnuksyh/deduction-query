@@ -6,7 +6,7 @@ export default function Options({ game }) {
       <header className="mb-8 border-b border-zinc-800 pb-4">
         <button
           onClick={() => game.setScreen('menu')}
-          className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-teal"
+          className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
         >
           &larr; main menu
         </button>
@@ -30,7 +30,7 @@ export default function Options({ game }) {
         <div>
           <div className="mb-2 flex items-center justify-between">
             <span className="font-display text-lg tracking-wide text-zinc-200">Text scale</span>
-            <span className="text-sm text-teal">{settings.textScale.toFixed(2)}x</span>
+            <span className="text-sm text-zinc-300">{settings.textScale.toFixed(2)}x</span>
           </div>
           <input
             type="range"
@@ -70,7 +70,7 @@ function Toggle({ label, desc, value, onChange }) {
       <button
         onClick={() => onChange(!value)}
         className={`h-7 w-14 rounded-full border transition-colors ${
-          value ? 'border-teal-dim bg-teal-dim' : 'border-zinc-700 bg-zinc-800'
+          value ? 'border-zinc-700 bg-zinc-700' : 'border-zinc-700 bg-zinc-800'
         }`}
       >
         <span
