@@ -16,6 +16,24 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,wasm}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+        // Drop precaches from previous builds as soon as the new SW activates,
+        // so deleted chunk hashes don't linger and 404 on next navigation.
+        cleanupOutdatedCaches: true,
+        // Serve index.html network-first: a returning, online visitor gets the
+        // freshly deployed HTML (and current chunk hashes) instead of a stale
+        // cached shell that points at chunks the server has already deleted.
+        // Falls back to the precached shell only when the network is unavailable.
+        runtimeCaching: [
+          {
+            urlPattern: ({ request, sameOrigin }) =>
+              sameOrigin && request.mode === 'navigate',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'html-shell',
+              networkTimeoutSeconds: 3,
+            },
+          },
+        ],
       },
       manifest: {
         name: 'Detective Query',
