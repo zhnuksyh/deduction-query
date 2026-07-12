@@ -1,11 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
 
 /**
  * Renders a query result set with TanStack Table. Sortable columns, sticky
@@ -78,9 +78,10 @@ export default function ResultsTable({ result }) {
                     onClick={header.column.getToggleSortingHandler()}
                     className="cursor-pointer select-none whitespace-nowrap border-b border-zinc-700 px-3 py-2 text-left font-bold uppercase tracking-wider text-zinc-300 hover:text-zinc-100/80"
                   >
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                    <span className="ml-1 text-zinc-600">
-                      {sorted === 'asc' ? '▲' : sorted === 'desc' ? '▼' : ''}
+                    <span className="inline-flex items-center gap-1">
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {sorted === 'asc' && <ChevronUp className="h-3 w-3 text-zinc-500" strokeWidth={2.5} />}
+                      {sorted === 'desc' && <ChevronDown className="h-3 w-3 text-zinc-500" strokeWidth={2.5} />}
                     </span>
                   </th>
                 )

@@ -1,3 +1,5 @@
+import { ChevronLeft } from 'lucide-react'
+
 export default function Options({ game }) {
   const { settings } = game.save
 
@@ -6,9 +8,10 @@ export default function Options({ game }) {
       <header className="mb-8 border-b border-zinc-800 pb-4">
         <button
           onClick={() => game.setScreen('menu')}
-          className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
+          className="flex items-center gap-1 text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
         >
-          &larr; main menu
+          <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
+          main menu
         </button>
         <h1 className="mt-3 font-display text-4xl font-black text-zinc-100">OPTIONS</h1>
       </header>

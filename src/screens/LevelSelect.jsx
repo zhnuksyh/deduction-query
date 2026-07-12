@@ -19,7 +19,7 @@ export default function LevelSelect({ game }) {
   return (
     <div className="flex h-full w-full flex-col">
       {/* Top bar — "Menu" button placed like the case page's "‹ FILES". */}
-      <header className="px-6 py-4">
+      <header className="px-6 pb-4 pt-8">
         <div className="mx-auto w-full max-w-4xl">
           <button
             onClick={() => game.setScreen('menu')}
@@ -104,7 +104,7 @@ function Folder({ c, unlocked, solved, onOpen }) {
     >
       {/* Vertical file code down the top-right corner. */}
       <div
-        className="pointer-events-none absolute right-4 top-4 text-sm font-light uppercase tracking-[0.5em] text-zinc-500"
+        className="pointer-events-none absolute right-4 top-4 text-lg font-bold uppercase tracking-[0.4em] text-zinc-500/40"
         style={{ writingMode: 'vertical-rl' }}
       >
         FILE_{c.id.split('_')[1]}//
@@ -116,7 +116,8 @@ function Folder({ c, unlocked, solved, onOpen }) {
       </div>
 
       <div className="mt-4 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100">
-        open file &rarr;
+        open file
+        <ChevronRight className="h-3 w-3" strokeWidth={2.5} />
       </div>
 
       {/* Completion stamp, bottom-right, when the case is solved. */}
