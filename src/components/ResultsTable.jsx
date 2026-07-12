@@ -1,0 +1,111 @@
+import { useMemo } from 'react'
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import { useState } from 'react'
+
+/**
+ * Renders a query result set with TanStack Table. Sortable columns, sticky
+ * header. NULLs render as a dim placeholder.
+ */
+export default function ResultsTable({ result }) {
+  const [sorting, setSorting] = useState([])
+
+  const columns = useMemo(
+    () =>
+      (result?.columns || []).map((col) => ({
+        accessorKey: col,
+        header: col,
+        cell: (info) => {
+          const v = info.getValue()
+          if (v === null || v === undefined)
+            return <span className="italic text-zinc-600">NULL</span>
+          return String(v)
+        },
+      })),
+    [result?.columns],
+  )
+
+  const table = useReactTable({
+    data: result?.rows || [],
+    columns,
+    state: { sorting },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  })
+
+  if (!result) {
+    return (
+      <div className="flex h-full items-center justify-center text-xs text-zinc-600">
+        Run a query to see results.
+      </div>
+    )
+  }
+
+  if (result.error) {
+    return (
+      <div className="p-4">
+        <div className="border border-crimson-dim bg-crimson-dim/10 p-3 font-mono text-xs text-crimson">
+          <span className="font-bold">SQL ERROR:</span> {result.error}
+        </div>
+      </div>
+    )
+  }
+
+  if (result.empty || result.rows.length === 0) {
+    return (
+      <div className="flex h-full items-center justify-center text-xs text-zinc-600">
+        Query executed — 0 rows returned.
+      </div>
+    )
+  }
+
+  return (
+    <div className="h-full overflow-auto">
+      <table className="w-full border-collapse text-xs">
+        <thead className="sticky top-0 z-10 bg-zinc-800">
+          {table.getHeaderGroups().map((hg) => (
+            <tr key={hg.id}>
+              {hg.headers.map((header) => {
+                const sorted = header.column.getIsSorted()
+                return (
+                  <th
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                    className="cursor-pointer select-none whitespace-nowrap border-b border-zinc-700 px-3 py-2 text-left font-bold uppercase tracking-wider text-teal hover:text-teal/80"
+                  >
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                    <span className="ml-1 text-zinc-600">
+                      {sorted === 'asc' ? '▲' : sorted === 'desc' ? '▼' : ''}
+                    </span>
+                  </th>
+                )
+              })}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row, i) => (
+            <tr
+              key={row.id}
+              className={i % 2 ? 'bg-zinc-900/40' : 'bg-transparent'}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className="whitespace-nowrap border-b border-zinc-800/60 px-3 py-1.5 text-zinc-300"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
