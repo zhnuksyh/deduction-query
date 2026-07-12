@@ -18,9 +18,12 @@ export default function LevelSelect({ game }) {
 
   return (
     <div className="flex h-full w-full flex-col">
-      {/* Top bar — "Menu" button placed like the case page's "‹ FILES". */}
+      {/* Top bar — "Menu" button placed exactly where the case page shows
+          "‹ FILES". The min-height matches the case header's taller row (which is
+          sized by its title) so the back button sits at the same Y on both
+          screens for a seamless transition. */}
       <header className="px-6 pb-4 pt-8">
-        <div className="mx-auto w-full max-w-4xl">
+        <div className="mx-auto flex min-h-[1.25rem] w-full max-w-4xl items-center">
           <button
             onClick={() => game.setScreen('menu')}
             className="flex items-center gap-1 text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"

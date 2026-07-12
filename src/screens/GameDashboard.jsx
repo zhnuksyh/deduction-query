@@ -66,7 +66,7 @@ export default function GameDashboard({ game }) {
           below (same px-6 outer padding + max-w-4xl), so their left/right edges
           line up exactly. */}
       <header className="px-6 pb-4 pt-8">
-        <div className="mx-auto flex w-full max-w-4xl items-center justify-between">
+        <div className="mx-auto flex min-h-[1.25rem] w-full max-w-4xl items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={() => game.setScreen('levels')}
