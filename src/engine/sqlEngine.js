@@ -13,13 +13,17 @@ let sqlPromise = null
 export function getSqlJs() {
   if (!sqlPromise) {
     sqlPromise = (async () => {
-      const [{ default: initSqlJs }, { default: wasmUrl }] = await Promise.all([
+      const [sqlModule, wasmModule] = await Promise.all([
         import('sql.js'),
         // Vite resolves this to a hashed asset URL at build time; the ?url import
         // is now evaluated lazily rather than at module top, so it never blocks
         // (or crashes) the initial render.
         import('sql.js/dist/sql-wasm.wasm?url'),
       ])
+      // sql.js is a UMD module; under Vite's dev/prod ESM interop the init
+      // function can land on `.default` or be the namespace itself. Handle both.
+      const initSqlJs = sqlModule.default || sqlModule
+      const wasmUrl = wasmModule.default || wasmModule
       return initSqlJs({ locateFile: () => wasmUrl })
     })()
   }
