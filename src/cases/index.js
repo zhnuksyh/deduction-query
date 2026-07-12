@@ -7,7 +7,6 @@ import { case01 } from './case01.js'
  * FALLING, SIGNAL, AFTER WORK.
  */
 const lockedStub = (over) => ({
-  status: 'UNRESOLVED',
   locked: true,
   crimeScene: null,
   schemaSql: null,

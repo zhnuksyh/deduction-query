@@ -78,9 +78,11 @@ export default function GameDashboard({ game }) {
             <div className="h-4 w-px bg-zinc-800" />
             <span className="text-sm font-medium tracking-wide text-zinc-200">{caseData.title}</span>
           </div>
-          <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-600">
-            {game.save.solvedCases.includes(caseData.id) ? 'CASE CLOSED' : 'UNRESOLVED'}
-          </span>
+          {game.save.solvedCases.includes(caseData.id) && (
+            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-600">
+              CASE CLOSED
+            </span>
+          )}
         </div>
       </header>
 
