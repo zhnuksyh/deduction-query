@@ -56,8 +56,9 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
     <div className="flex h-full gap-4 p-5">
       {/* Main workspace */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-zinc-800" onKeyDown={onKeyDown}>
-        {/* SQL input */}
-        <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-1.5">
+        {/* SQL input. Fixed header height so its bottom border lines up with the
+            notebook header's border across the gap. */}
+        <div className="flex h-10 items-center justify-between border-b border-zinc-800 px-4">
           <span className="text-[10px] uppercase tracking-[0.25em] text-zinc-500">
             SQL input
           </span>
@@ -113,11 +114,19 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
             </div>
           )}
         </div>
+
+        {/* Footer bar — same height as the notebook footer so their top borders
+            line up across the gap. */}
+        <div className="flex h-8 items-center border-t border-zinc-800 px-4 text-[9px] uppercase tracking-widest text-zinc-700">
+          {db ? 'ready' : 'loading engine…'}
+        </div>
       </div>
 
       {/* Detective's Notebook sidebar */}
       <aside className="flex w-72 shrink-0 flex-col overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/40">
-        <div className="border-b border-zinc-800 px-4 py-2 text-[10px] uppercase tracking-[0.25em] text-zinc-500">
+        {/* Header height matches the SQL-input header so their bottom borders
+            sit on the same line. */}
+        <div className="flex h-10 items-center border-b border-zinc-800 px-4 text-[10px] uppercase tracking-[0.25em] text-zinc-500">
           detective's notebook
         </div>
         <textarea
@@ -127,7 +136,7 @@ export default function AnalysisTab({ caseData, db, dbError, game, unlocked, onU
           className="flex-1 resize-none bg-transparent px-4 py-3 text-xs leading-relaxed text-zinc-300 placeholder:text-zinc-700 focus:outline-none"
           spellCheck={false}
         />
-        <div className="border-t border-zinc-800 px-4 py-1.5 text-[9px] uppercase tracking-widest text-zinc-700">
+        <div className="flex h-8 items-center border-t border-zinc-800 px-4 text-[9px] uppercase tracking-widest text-zinc-700">
           auto-saved locally
         </div>
       </aside>
