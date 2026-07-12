@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import bgUrl from '../assets/main-menu-bg.jpg'
 
 const MENU = [
@@ -18,11 +19,27 @@ GROUP BY suspect_id HAVING count(*) > 1
 `.repeat(6)
 
 export default function MainMenu({ game }) {
+  const [confirmNew, setConfirmNew] = useState(false)
+
+  // There's meaningful progress if any case is solved or a case was opened.
+  const hasProgress =
+    game.save.solvedCases.length > 0 ||
+    game.save.lastCaseId != null ||
+    Object.keys(game.save.notebooks || {}).length > 0
+
+  const startNewGame = () => {
+    game.hardReset()
+    game.setScreen('levels')
+  }
+
   const handle = (key) => {
     switch (key) {
       case 'new':
+        // Starting fresh wipes progress — confirm first if there's any.
+        if (hasProgress) setConfirmNew(true)
+        else startNewGame()
+        break
       case 'continue':
-        // Both routes land on the level-select screen.
         game.setScreen('levels')
         break
       case 'options':
@@ -65,18 +82,18 @@ export default function MainMenu({ game }) {
         }}
       />
 
-      {/* Content: left-aligned title + menu. */}
-      <div className="relative flex h-full w-full flex-col justify-center px-10 sm:px-16">
-        <h1 className="mb-10 font-display text-5xl font-black leading-none tracking-tight text-zinc-100 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-7xl">
-          DEDUCTIVE<span className="text-crimson">_</span>QUERY
+      {/* Content: left-aligned title + menu, nudged in from the edge. */}
+      <div className="relative flex h-full w-full flex-col justify-center pl-16 pr-10 sm:pl-24">
+        <h1 className="mb-10 font-display text-4xl font-black leading-none tracking-tight text-zinc-100 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-6xl">
+          DEDUCTIVE<span className="text-[#f26d78]">_</span>QUERY
         </h1>
 
-        <ul className="flex w-full max-w-xs flex-col gap-2.5">
+        <ul className="flex w-full max-w-[220px] flex-col gap-2.5">
           {MENU.map((item) => (
             <li key={item.key}>
               <button
                 onClick={() => handle(item.key)}
-                className="w-full rounded-xl border border-white/10 bg-zinc-950/50 px-5 py-3 text-left font-display text-sm font-semibold uppercase tracking-[0.2em] text-zinc-300 backdrop-blur-sm transition-colors hover:border-crimson/60 hover:bg-zinc-950/70 hover:text-crimson"
+                className="w-full rounded-xl border border-white/10 bg-zinc-950/50 px-4 py-2.5 text-left font-display text-xs font-semibold uppercase tracking-[0.2em] text-zinc-300 backdrop-blur-sm transition-colors hover:border-[#f26d78]/70 hover:bg-zinc-950/70"
               >
                 {item.label}
               </button>
@@ -84,6 +101,38 @@ export default function MainMenu({ game }) {
           ))}
         </ul>
       </div>
+
+      {/* Confirm overwriting an existing save before starting a new game. */}
+      {confirmNew && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-zinc-950/70 backdrop-blur-sm">
+          <div className="mx-6 w-full max-w-sm rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl">
+            <h2 className="font-display text-lg font-bold uppercase tracking-wide text-zinc-100">
+              Start a new game?
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+              This will erase your current progress — solved cases, unlocked files, and
+              notebook notes. This can’t be undone.
+            </p>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setConfirmNew(false)}
+                className="rounded-lg border border-zinc-700 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setConfirmNew(false)
+                  startNewGame()
+                }}
+                className="rounded-lg bg-crimson px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-crimson/80"
+              >
+                Erase &amp; start
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
