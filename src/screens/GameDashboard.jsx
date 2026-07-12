@@ -74,8 +74,8 @@ export default function GameDashboard({ game, play, shake }) {
       {/* Case header — its inner container matches the content-card container
           below (same px-6 outer padding + max-w-4xl), so their left/right edges
           line up exactly. */}
-      <header className="px-6 pb-4 pt-8">
-        <div className="mx-auto flex min-h-[1.25rem] w-full max-w-4xl items-center justify-between">
+      <header className="px-4 pb-4 pt-5 sm:px-6 sm:pt-8">
+        <div className="mx-auto flex min-h-[1.25rem] w-full max-w-4xl items-center justify-between gap-2">
           <div className="flex items-center gap-4">
             <button
               onClick={() => {
@@ -100,9 +100,12 @@ export default function GameDashboard({ game, play, shake }) {
 
       {/* Folder-card: tabs stick out of the top of a white-outlined content box.
           Centred with a max width and consistent page padding on all sides. */}
-      <div className="flex min-h-0 flex-1 flex-col items-center px-6 pb-6 pt-6">
+      <div className="flex min-h-0 flex-1 flex-col items-center px-3 pb-3 pt-3 sm:px-6 sm:pb-6 sm:pt-6">
         <div className="flex min-h-0 w-full max-w-4xl flex-1 flex-col">
-          <TabBar tabs={TABS} active={tab} onSelect={selectTab} />
+          {/* Tab bar scrolls horizontally on narrow screens so all four fit. */}
+          <div className="shrink-0 overflow-x-auto">
+            <TabBar tabs={TABS} active={tab} onSelect={selectTab} />
+          </div>
 
           {/* -1px top margin lets the active tab's open bottom merge into the card.
               Keyed on `tab` so switching replays a soft fade-up on the panel. */}

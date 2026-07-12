@@ -70,9 +70,11 @@ export default function AnalysisTab({ caseData, db, dbError, game, play, shake, 
   if (!caseData.schemaSql) return <LockedCase caseData={caseData} />
 
   return (
-    <div className="flex h-full gap-4 p-5">
+    // Stack the workspace over the notebook on small screens; side-by-side on
+    // desktop. `overflow-auto` lets the stacked layout scroll on short viewports.
+    <div className="flex h-full flex-col gap-4 overflow-auto p-3 sm:p-5 lg:flex-row">
       {/* Main workspace */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-zinc-800" onKeyDown={onKeyDown}>
+      <div className="flex min-h-[320px] min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-zinc-800" onKeyDown={onKeyDown}>
         {/* SQL input. Fixed header height so its bottom border lines up with the
             notebook header's border across the gap. */}
         <div className="flex h-10 items-center justify-between border-b border-zinc-800 px-4">
@@ -139,8 +141,8 @@ export default function AnalysisTab({ caseData, db, dbError, game, play, shake, 
         </div>
       </div>
 
-      {/* Detective's Notebook sidebar */}
-      <aside className="flex w-72 shrink-0 flex-col overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/40">
+      {/* Detective's Notebook — full width when stacked, fixed sidebar on desktop. */}
+      <aside className="flex h-48 shrink-0 flex-col overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/40 lg:h-auto lg:w-72">
         {/* Header height matches the SQL-input header so their bottom borders
             sit on the same line. */}
         <div className="flex h-10 items-center border-b border-zinc-800 px-4 text-[10px] uppercase tracking-[0.25em] text-zinc-500">

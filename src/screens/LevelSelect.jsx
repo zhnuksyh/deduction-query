@@ -94,8 +94,10 @@ function CarouselButton({ dir, onClick }) {
   )
 }
 
-// Each card is 1/3 of the track width (minus the gaps) so exactly three show.
-const CARD_WIDTH = 'w-[calc((100%-2rem)/3)]'
+// Cards fill more of the track on small screens (1 up on phones, 2 on tablets,
+// 3 on desktop) so the text stays readable; the carousel scrolls the rest.
+const CARD_WIDTH =
+  'w-[85%] sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]'
 
 function Folder({ c, index = 0, unlocked, solved, onOpen, onHover }) {
   if (!unlocked) {
