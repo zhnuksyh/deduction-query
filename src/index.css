@@ -44,6 +44,26 @@ body {
   outline: none;
 }
 
+/*
+ * Calm the editor's highlighting: only a subtle dark band marks the cursor's
+ * line; drop the bright active-line-gutter and selection-match backgrounds.
+ */
+.cm-editor .cm-activeLine {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+.cm-editor .cm-activeLineGutter {
+  background-color: transparent;
+}
+.cm-editor .cm-selectionMatch,
+.cm-editor .cm-matchingBracket {
+  background-color: transparent;
+}
+/* Text selection stays readable but muted. */
+.cm-editor .cm-selectionBackground,
+.cm-editor.cm-focused .cm-selectionBackground {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 /* Vertical folder-tab label used on the level-select cabinet. */
 .vertical-rl {
   writing-mode: vertical-rl;
