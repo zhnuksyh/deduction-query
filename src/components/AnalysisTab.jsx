@@ -136,12 +136,6 @@ export default function AnalysisTab({ caseData, db, dbError, game, play, shake, 
             </div>
           )}
         </div>
-
-        {/* Footer bar — same height as the notebook footer so their top borders
-            line up across the gap. */}
-        <div className="flex h-8 items-center border-t border-zinc-800 px-4 text-[9px] uppercase tracking-widest text-zinc-700">
-          {db ? 'ready' : 'loading engine…'}
-        </div>
       </div>
 
       {/* Detective's Notebook — full width when stacked, fixed sidebar on desktop. */}
@@ -158,9 +152,6 @@ export default function AnalysisTab({ caseData, db, dbError, game, play, shake, 
           className="flex-1 resize-none bg-transparent px-4 py-3 text-xs leading-relaxed text-zinc-300 placeholder:text-zinc-700 focus:outline-none"
           spellCheck={false}
         />
-        <div className="flex h-8 items-center border-t border-zinc-800 px-4 text-[9px] uppercase tracking-widest text-zinc-700">
-          auto-saved locally
-        </div>
       </aside>
     </div>
   )
