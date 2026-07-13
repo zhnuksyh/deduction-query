@@ -58,7 +58,11 @@ export const case01 = {
     {
       tab: 'report',
       title: '4 · Report Card',
-      body: 'Fill each blank from the dropdowns. A blank stays locked until you’ve run the query that proves it — then submit to close the case and unlock the next file. Good luck.',
+      body: 'Fill each blank from the dropdowns. A blank stays locked until you’ve run the query that proves it — then submit to close the case and unlock the next file.',
+    },
+    {
+      title: 'Tip · Case Brief',
+      body: 'Stuck on SQL? Click the book icon at the top right — or press the Tab key — to toggle the Case Brief, a cheat sheet of every clause you’ll need, without leaving the case. Good luck.',
     },
   ],
 

@@ -4,7 +4,7 @@ import bgUrl from '../assets/main-menu-bg.jpg'
 const MENU = [
   { key: 'new', label: 'NEW GAME' },
   { key: 'continue', label: 'CONTINUE' },
-  { key: 'guide', label: 'GUIDE BOOK' },
+  { key: 'guide', label: 'CASE BRIEF' },
   { key: 'options', label: 'OPTIONS' },
   { key: 'credits', label: 'CREDITS' },
 ]

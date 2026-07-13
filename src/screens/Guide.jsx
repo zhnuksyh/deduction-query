@@ -68,23 +68,28 @@ const CLAUSES = [
   },
 ]
 
-export default function Guide({ game, play }) {
+// Renders as a full screen from the main menu, or as an in-place overlay when
+// `overlay` is set (opened via the book icon / Tab key in the case header,
+// which also owns the close control).
+export default function Guide({ game, play, overlay = false }) {
   return (
     <div className="h-full w-full overflow-y-auto">
       <div className="mx-auto max-w-3xl px-6 py-8">
         <header className="mb-8 border-b border-zinc-800 pb-4">
-          <button
-            onClick={() => {
-              play?.('click')
-              game.setScreen('menu')
-            }}
-            onMouseEnter={() => play?.('hover')}
-            className="flex items-center gap-1 text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
-          >
-            <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
-            main menu
-          </button>
-          <h1 className="mt-3 font-display text-4xl font-black text-zinc-100">GUIDE BOOK</h1>
+          {!overlay && (
+            <button
+              onClick={() => {
+                play?.('click')
+                game.setScreen('menu')
+              }}
+              onMouseEnter={() => play?.('hover')}
+              className="flex items-center gap-1 text-[11px] uppercase tracking-[0.3em] text-zinc-500 hover:text-zinc-100"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
+              main menu
+            </button>
+          )}
+          <h1 className="mt-3 font-display text-4xl font-black text-zinc-100">CASE BRIEF</h1>
           <p className="mt-2 text-sm text-zinc-500">
             Everything you need to crack a case with SQL.
           </p>

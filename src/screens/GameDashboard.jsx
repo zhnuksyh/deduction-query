@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ChevronLeft } from 'lucide-react'
+import { BookOpen, ChevronLeft, X } from 'lucide-react'
 import { getCase } from '../cases/index.js'
 import { createDatabase } from '../engine/sqlEngine.js'
 import TabBar from '../components/TabBar.jsx'
@@ -8,6 +8,7 @@ import CaseBoardTab from '../components/CaseBoardTab.jsx'
 import AnalysisTab from '../components/AnalysisTab.jsx'
 import ReportCardTab from '../components/ReportCardTab.jsx'
 import TutorialOverlay from '../components/TutorialOverlay.jsx'
+import Guide from './Guide.jsx'
 
 const TABS = [
   { key: 'scene', label: 'CRIME SCENE' },
@@ -19,6 +20,7 @@ const TABS = [
 export default function GameDashboard({ game, play, shake }) {
   const caseData = getCase(game.openCaseId)
   const [tab, setTab] = useState('scene')
+  const [showBrief, setShowBrief] = useState(false)
 
   const selectTab = (key) => {
     if (key !== tab) play('paper') // page-flip rustle on tab change
@@ -26,6 +28,18 @@ export default function GameDashboard({ game, play, shake }) {
   }
   const [db, setDb] = useState(null)
   const [dbError, setDbError] = useState(null)
+
+  // Tab key toggles the Case Brief overlay from anywhere in the case.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key !== 'Tab') return
+      e.preventDefault()
+      play(showBrief ? 'back' : 'click')
+      setShowBrief(!showBrief)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [showBrief, play])
 
   // Unlocked report blanks for THIS case, hydrated from the save.
   const unlocked = useMemo(
@@ -90,11 +104,30 @@ export default function GameDashboard({ game, play, shake }) {
             <div className="h-4 w-px bg-zinc-800" />
             <span className="text-sm font-medium tracking-wide text-zinc-200">{caseData.title}</span>
           </div>
-          {game.save.solvedCases.includes(caseData.id) && (
-            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-600">
-              CASE CLOSED
-            </span>
-          )}
+          <div className="flex items-center gap-4">
+            {game.save.solvedCases.includes(caseData.id) && (
+              <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-600">
+                CASE CLOSED
+              </span>
+            )}
+            {/* Toggles the Case Brief. z-50 keeps it clickable above the
+                overlay (z-40), so the X sits exactly where the book was. */}
+            <button
+              onClick={() => {
+                play(showBrief ? 'back' : 'click')
+                setShowBrief((v) => !v)
+              }}
+              className="press relative z-50 rounded-lg border border-zinc-800 p-1.5 text-zinc-500 transition-colors hover:border-zinc-600 hover:text-zinc-100"
+              aria-label={showBrief ? 'Close the Case Brief' : 'Open the Case Brief'}
+              title="Case Brief (Tab)"
+            >
+              {showBrief ? (
+                <X className="h-4 w-4" strokeWidth={2} />
+              ) : (
+                <BookOpen className="h-4 w-4" strokeWidth={2} />
+              )}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -139,6 +172,13 @@ export default function GameDashboard({ game, play, shake }) {
           </main>
         </div>
       </div>
+
+      {/* Case Brief overlay — the guide, accessible without leaving the case. */}
+      {showBrief && (
+        <div className="absolute inset-0 z-40 animate-pop-in bg-zinc-950">
+          <Guide game={game} play={play} overlay />
+        </div>
+      )}
 
       {showTutorial && (
         <TutorialOverlay
