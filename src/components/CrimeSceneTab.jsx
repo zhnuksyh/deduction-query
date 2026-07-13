@@ -22,7 +22,7 @@ export default function CrimeSceneTab({ caseData }) {
         </dl>
 
         {/* Report body — the forensic details are woven into this narrative. */}
-        <div className="whitespace-pre-line text-sm leading-[2.1] text-zinc-300">
+        <div className="whitespace-pre-line text-base leading-[2.6] text-zinc-300">
           {scene.report}
         </div>
       </div>
