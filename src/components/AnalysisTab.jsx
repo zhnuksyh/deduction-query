@@ -8,12 +8,17 @@ import { LockedCase } from './CrimeSceneTab.jsx'
 
 const STARTER = '-- Query the evidence. Try:\nSELECT * FROM suspects;'
 
+// Last run result per case, kept in memory so switching tabs (or leaving and
+// reopening the case) doesn't clear the results grid. Deliberately not in the
+// localStorage save — result sets can be large, and a fresh session re-runs fine.
+const resultCache = new Map()
+
 export default function AnalysisTab({ caseData, db, dbError, game, play, shake, unlocked, onUnlocksChange }) {
   // The editor draft lives in the save so it survives tab switches, returning
   // to the menu, and opening other cases.
   const sqlText = game.save.sqlDrafts?.[caseData.id] ?? STARTER
   const setSqlText = (text) => game.setSqlDraft(caseData.id, text)
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState(() => resultCache.get(caseData.id) ?? null)
   const [flash, setFlash] = useState(null) // toast for newly unlocked clues
 
   const notebook = game.save.notebooks[caseData.id] || ''
@@ -28,6 +33,7 @@ export default function AnalysisTab({ caseData, db, dbError, game, play, shake, 
     if (!db) return
     play('run')
     const res = runQuery(db, sqlText)
+    resultCache.set(caseData.id, res)
     setResult(res)
 
     if (res.error) {
@@ -60,7 +66,7 @@ export default function AnalysisTab({ caseData, db, dbError, game, play, shake, 
     } else {
       play('success')
     }
-  }, [db, sqlText, caseData.report, unlocked, onUnlocksChange, play, shake])
+  }, [db, sqlText, caseData.id, caseData.report, unlocked, onUnlocksChange, play, shake])
 
   // Ctrl/Cmd+Enter to run.
   const onKeyDown = (e) => {
