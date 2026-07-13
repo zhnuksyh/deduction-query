@@ -201,22 +201,22 @@ function noiseBurst({ start = 0, dur = 0.18, gain = 1, freq = 1800, sweepTo = 90
 // The sound palette. Each entry is a small composition of tones.
 const EFFECTS = {
   // Light UI feedback.
-  hover: () => tone({ freq: 620, type: 'sine', dur: 0.05, gain: 0.35 }),
-  click: () => tone({ freq: 420, type: 'triangle', dur: 0.08, gain: 0.7, glideTo: 300 }),
-  tab: () => tone({ freq: 520, type: 'triangle', dur: 0.09, gain: 0.6, glideTo: 660 }),
+  hover: () => tone({ freq: 620, type: 'sine', dur: 0.05, gain: 0.55 }),
+  click: () => tone({ freq: 420, type: 'triangle', dur: 0.08, gain: 1.05, glideTo: 300 }),
+  tab: () => tone({ freq: 520, type: 'triangle', dur: 0.09, gain: 0.9, glideTo: 660 }),
   // Tab switch: a paper-flip rustle — two overlapping noise sweeps for the
   // "page lifting then settling" texture, with a soft low thump underneath.
   paper: () => {
-    noiseBurst({ dur: 0.14, gain: 0.5, freq: 2600, sweepTo: 1100, q: 0.7 })
-    noiseBurst({ start: 0.06, dur: 0.13, gain: 0.35, freq: 1500, sweepTo: 700, q: 0.9 })
-    tone({ freq: 150, type: 'sine', start: 0.05, dur: 0.09, gain: 0.25, glideTo: 90 })
+    noiseBurst({ dur: 0.14, gain: 0.75, freq: 2600, sweepTo: 1100, q: 0.7 })
+    noiseBurst({ start: 0.06, dur: 0.13, gain: 0.5, freq: 1500, sweepTo: 700, q: 0.9 })
+    tone({ freq: 150, type: 'sine', start: 0.05, dur: 0.09, gain: 0.4, glideTo: 90 })
   },
-  toggle: () => tone({ freq: 700, type: 'square', dur: 0.06, gain: 0.4 }),
-  back: () => tone({ freq: 360, type: 'triangle', dur: 0.1, gain: 0.6, glideTo: 240 }),
+  toggle: () => tone({ freq: 700, type: 'square', dur: 0.06, gain: 0.6 }),
+  back: () => tone({ freq: 360, type: 'triangle', dur: 0.1, gain: 0.9, glideTo: 240 }),
 
   // Dropdown interactions.
-  open: () => tone({ freq: 480, type: 'sine', dur: 0.07, gain: 0.4, glideTo: 600 }),
-  select: () => tone({ freq: 560, type: 'triangle', dur: 0.08, gain: 0.5 }),
+  open: () => tone({ freq: 480, type: 'sine', dur: 0.07, gain: 0.6, glideTo: 600 }),
+  select: () => tone({ freq: 560, type: 'triangle', dur: 0.08, gain: 0.75 }),
 
   // SQL run + results.
   run: () => {
