@@ -14,7 +14,7 @@ let muted = false
 
 // Volume mix (0..1). The audible SFX level is BASE_GAIN * master * sfx; the
 // BASE keeps the synth palette gentle regardless of the user's slider.
-const BASE_GAIN = 0.22
+const BASE_GAIN = 0.3
 let masterVolume = 0.8
 let sfxVolume = 0.8
 
