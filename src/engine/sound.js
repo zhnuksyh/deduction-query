@@ -12,11 +12,14 @@ let ctx = null
 let master = null
 let muted = false
 
-// Volume mix (0..1). The audible SFX level is BASE_GAIN * master * sfx; the
-// BASE keeps the synth palette gentle regardless of the user's slider.
+// Volume mix (0..1). The audible SFX level is BASE_GAIN * master * sfx * boost;
+// the BASE keeps the synth palette gentle regardless of the user's slider.
 const BASE_GAIN = 0.3
 let masterVolume = 0.8
 let sfxVolume = 0.8
+// Extra multiplier on the SFX bus. Defaults to 1 (no change for the game); the
+// trailer bumps this so effects punch above its background music.
+let sfxBoost = 1
 
 // Ambience graph (built lazily on first start). A soft, slowly-drifting room
 // tone that sits far under the effects to give the app a "live workspace" feel.
@@ -31,7 +34,7 @@ function ensureContext() {
   if (!AC) return null
   ctx = new AC()
   master = ctx.createGain()
-  master.gain.value = BASE_GAIN * masterVolume * sfxVolume
+  master.gain.value = BASE_GAIN * masterVolume * sfxVolume * sfxBoost
   master.connect(ctx.destination)
   return ctx
 }
@@ -39,7 +42,7 @@ function ensureContext() {
 function applyMasterGain() {
   if (!master || !ctx) return
   // Muting cuts the whole synth bus; otherwise scale by the mix.
-  const target = muted ? 0.0001 : BASE_GAIN * masterVolume * sfxVolume
+  const target = muted ? 0.0001 : BASE_GAIN * masterVolume * sfxVolume * sfxBoost
   master.gain.setTargetAtTime(target, ctx.currentTime, 0.05)
 }
 
@@ -64,6 +67,15 @@ export function setMuted(value) {
 export function setSfxVolume({ master: m, sfx } = {}) {
   if (m !== undefined) masterVolume = clamp01(m)
   if (sfx !== undefined) sfxVolume = clamp01(sfx)
+  applyMasterGain()
+}
+
+/**
+ * Set an extra multiplier on the SFX bus (default 1). The trailer uses this to
+ * make effects punch above its music without touching the game's own mix.
+ */
+export function setSfxBoost(value) {
+  sfxBoost = Math.max(0, Number(value) || 1)
   applyMasterGain()
 }
 

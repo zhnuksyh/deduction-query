@@ -33,8 +33,16 @@ function ensureAudio() {
   return audio
 }
 
+// Optional absolute/relative override for the track URL. The trailer sets this
+// because it's served from a /trailer/ subpath where the app's relative base
+// ('./') would resolve to /trailer/music/ (wrong) instead of the site root.
+let srcOverride = null
+export function setMusicSrc(url) {
+  srcOverride = url || null
+}
+
 function srcFor() {
-  return `${base}music/${MUSIC_FILE}`
+  return srcOverride || `${base}music/${MUSIC_FILE}`
 }
 
 /** Attempt to play; browsers reject until a user gesture, which we swallow. */
