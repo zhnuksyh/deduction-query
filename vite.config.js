@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -6,6 +7,17 @@ import { VitePWA } from 'vite-plugin-pwa'
 // on GitHub Pages project sites, Netlify, and Vercel alike.
 export default defineConfig({
   base: './',
+  build: {
+    rollupOptions: {
+      // Two pages: the game at / and the kinetic-typography trailer at
+      // /trailer/. A real second HTML entry (not a route) so it works on any
+      // static host without SPA-fallback rewrites.
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        trailer: fileURLToPath(new URL('./trailer/index.html', import.meta.url)),
+      },
+    },
+  },
   plugins: [
     react(),
     VitePWA({
